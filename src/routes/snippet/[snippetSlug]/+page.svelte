@@ -1,6 +1,6 @@
 <script>
   import Navbar from '../../../components/Navbar.svelte';
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import { page } from '$app/stores';
 
   let loading = true;
@@ -22,7 +22,12 @@
 
   onMount(() => {
     fetchData();
-    initializePrism();
+  });
+
+  afterUpdate(() => {
+    if (data) {
+      initializePrism();
+    }
   });
 
   function copySnippet(code, event) {
@@ -87,7 +92,7 @@
         <button class="copy-button" on:click={(event) => copySnippet(data.code_snippet, event)}>
           <i class="fas fa-copy"></i>
         </button>
-        <pre><code class="language-javascript">{@html data.code_snippet}</code></pre>
+        {@html data.code_snippet}
       </div>
     </div>
   </div>
