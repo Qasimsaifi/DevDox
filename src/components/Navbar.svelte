@@ -1,8 +1,10 @@
 <script>
-  import logo from '$lib/image/logo.png'
+  import logo from '$lib/image/logo.png';
   import { onMount } from 'svelte';
+  import { getCookie, deleteCookie } from '../utils/cookies.js';
 
   let isNavOpen = false;
+  export let isLoggedIn = false;
 
   onMount(() => {
     const navbarToggle = document.getElementById('navbar-toggle');
@@ -16,7 +18,21 @@
         isNavOpen = false;
       }
     });
+
+    // Check if the user is logged in
+    isLoggedIn = !!getCookie('access_token');
+
+    // Optional: Redirect to the login page if not logged in
+    // if (!isLoggedIn) {
+    //   window.location.href = '/login';
+    // }
   });
+
+  function handleLogout() {
+    deleteCookie('access_token');
+    // Optional: Redirect to the login page after logout
+    // window.location.href = '/login';
+  }
 </script>
 
 <section class="navigation">
@@ -40,15 +56,21 @@
         <li>
           <a href="/">Contact</a>
         </li>
-        <li>
-          <a href="/">Login</a>
-        </li>
-        <li>
-          <a href="/">Upload Snippet</a>
-        </li>
-        <li>
-          <a href="/">My Snippets</a>
-        </li>
+        {#if isLoggedIn}
+          <li>
+            <a href="/" on:click={handleLogout}>Logout</a>
+          </li>
+          <li>
+            <a href="/">Upload Snippet</a>
+          </li>
+          <li>
+            <a href="/">My Snippets</a>
+          </li>
+        {:else}
+          <li>
+            <a href="/login">Login</a>
+          </li>
+        {/if}
       </ul>
     </nav>
   </div>
@@ -165,27 +187,14 @@
     }
   }
 
-  @media screen and (min-width: 800px) {
-    .nav-list {
-      display: block !important;
-    }
-  }
-
-  #navbar-toggle {
-    position: absolute;
-    left: 18px;
-    top: 15px;
-    cursor: pointer;
-    padding: 10px 35px 16px 0px;
-  }
-
-  #navbar-toggle span,
-  #navbar-toggle span:before,
-  #navbar-toggle span:after {
+  /* Styles for active state */
+  .nav-mobile span,
+  .nav-mobile span:before,
+  .nav-mobile span:after {
     cursor: pointer;
     border-radius: 1px;
-    height: 3px;
-    width: 30px;
+    height: 5px;
+    width: 35px;
     background: #ffffff;
     position: absolute;
     display: block;
@@ -193,30 +202,90 @@
     transition: all 300ms ease-in-out;
   }
 
-  #navbar-toggle span:before {
+  .nav-mobile span:before {
     top: -10px;
   }
 
-  #navbar-toggle span:after {
+  .nav-mobile span:after {
     bottom: -10px;
   }
 
-  #navbar-toggle.active span {
+  .nav-mobile span,
+  .nav-mobile span:before,
+  .nav-mobile span:after {
+    background: #ffffff;
+  }
+
+  .nav-mobile.active span {
     background-color: transparent;
   }
 
-  #navbar-toggle.active span:before,
-  #navbar-toggle.active span:after {
+  .nav-mobile.active span:before,
+  .nav-mobile.active span:after {
     top: 0;
   }
 
-  #navbar-toggle.active span:before {
+  .nav-mobile.active span:before {
     transform: rotate(45deg);
-    top: 0;
   }
 
-  #navbar-toggle.active span:after {
+  .nav-mobile.active span:after {
     transform: rotate(-45deg);
-    top: 0;
+  }
+
+  @media only screen and (min-width: 800px) {
+    .nav-list {
+      display: block !important;
+      float: right;
+      height: auto !important;
+      padding: 0 !important;
+    }
+
+    .nav-list > li {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .nav-list > li:first-child {
+      margin-left: 0;
+    }
+
+    .nav-list > li > a {
+      line-height: 55px;
+    }
+
+    .nav-list > li > ul {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      display: none;
+      margin: 0;
+      padding: 0;
+      z-index: 99;
+      float: left;
+      min-width: 200px;
+      text-align: left;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+
+    .nav-list > li > ul li {
+      display: block;
+    }
+
+    .nav-list > li > ul li a {
+      padding: 15px;
+      line-height: 20px;
+      color: #333;
+    }
+
+    .nav-list > li > ul li a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .nav-list > li:hover > ul {
+      display: block;
+    }
   }
 </style>
