@@ -46,7 +46,7 @@
 
   function initializePrism() {
     let script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js';
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js';
     document.head.appendChild(script);
   }
 
@@ -110,7 +110,7 @@
             <button class="copy-button" on:click={(event) => copySnippet(snippet.code_snippet, event)}>
               <i class="fas fa-copy"></i>
             </button>
-            {@html snippet.code_snippet}
+       {@html snippet.code_snippet}
           </div>
         </div>
       {/each}

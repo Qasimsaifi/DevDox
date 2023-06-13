@@ -71,7 +71,7 @@
 
   function initializePrism() {
     const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js';
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js';
     document.head.appendChild(script);
   }
 </script>
@@ -82,9 +82,7 @@
   <p>Loading...</p>
 {:else if data}
   <div class="card">
-    <a href={"/data/" + data.slug}>
       <h4>{data.title}</h4>
-    </a>
     <div class="card-content">
       <h4>{data.title}</h4>
       <div>{@html data.content}</div>
@@ -99,6 +97,9 @@
 {:else}
   <p>Not found</p>
 {/if}
+
+
+
 
 <style>
   /* Loading message */
