@@ -19,7 +19,7 @@
 
   async function handleLogin() {
     try {
-      const response = await fetch('https://blogaxis-api.up.railway.app/api/v1/snippets/gettoken/', {
+      const response = await fetch('https://devdox.up.railway.app/api/v1/snippets/gettoken/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

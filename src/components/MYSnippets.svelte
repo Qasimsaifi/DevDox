@@ -23,7 +23,7 @@
 
   async function fetchUser() {
     try {
-      const response = await fetch('https://blogaxis-api.up.railway.app/api/v1/user', {
+      const response = await fetch('https://devdox.up.railway.app/api/v1/user', {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -46,7 +46,7 @@
 
   async function fetchSnippets() {
     try {
-      const response = await fetch(`https://blogaxis-api.up.railway.app/api/v1/snippets/snippet/?author=${user.id}`, {
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/snippet/?author=${user.id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }

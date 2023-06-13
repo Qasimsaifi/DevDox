@@ -21,7 +21,7 @@
   // Fetch data with the specified slug
   const fetchData = async () => {
     try {
-      const response = await fetch(`https://blogaxis-api.up.railway.app/api/v1/snippets/snippet/?slug=${dataSlug}`, {
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/snippet/?slug=${dataSlug}`, {
         headers: {
           Authorization: `Bearer ${getCookie('access_token')}`
         }
