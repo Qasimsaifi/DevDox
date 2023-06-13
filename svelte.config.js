@@ -1,15 +1,13 @@
-import adapter from '@sveltejs/adapter-vercel';
-import path from 'path';
-import dotenv from 'dotenv';
+import adapter from '@sveltejs/adapter-auto';
 
-dotenv.config({ path: path.resolve('.env') });
-
+/** @type {import('@sveltejs/kit').Config} */
 const config = {
-  kit: {
-    adapter: adapter({
-      // see the 'Deployment configuration' section below
-    })
-  }
+	kit: {
+		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
+		// If your environment is not supported or you settled on a specific environment, switch out the adapter.
+		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
+		adapter: adapter()
+	}
 };
 
 export default config;

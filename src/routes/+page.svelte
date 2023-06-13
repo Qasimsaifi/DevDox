@@ -4,7 +4,6 @@
   import Navbar from "../components/Navbar.svelte";
   import { onMount } from 'svelte';
   import { getCookie } from '../utils/cookies';
-  let apiKey = import.meta.env.VITE_API_URL;
   let snippets = [];
   let isLoading = true; 
   onMount(async () => {
@@ -16,7 +15,7 @@
       isLoading = true;
       
       // Make the GET request to the API endpoint
-      const response = await fetch(`${apiKey}api/v1/snippets/snippet/`, {
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/snippet/`, {
         method: "GET",
         headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
       });
