@@ -58,6 +58,9 @@
         </li>
         {#if isLoggedIn}
           <li>
+            <a href="/profile">Profile</a>
+          </li>
+          <li>
             <a href="/" on:click={handleLogout}>Logout</a>
           </li>
           <li>
@@ -187,14 +190,27 @@
     }
   }
 
-  /* Styles for active state */
-  .nav-mobile span,
-  .nav-mobile span:before,
-  .nav-mobile span:after {
+  @media screen and (min-width: 800px) {
+    .nav-list {
+      display: block !important;
+    }
+  }
+
+  #navbar-toggle {
+    position: absolute;
+    left: 18px;
+    top: 15px;
+    cursor: pointer;
+    padding: 10px 35px 16px 0px;
+  }
+
+  #navbar-toggle span,
+  #navbar-toggle span:before,
+  #navbar-toggle span:after {
     cursor: pointer;
     border-radius: 1px;
-    height: 5px;
-    width: 35px;
+    height: 3px;
+    width: 30px;
     background: #ffffff;
     position: absolute;
     display: block;
@@ -202,90 +218,30 @@
     transition: all 300ms ease-in-out;
   }
 
-  .nav-mobile span:before {
+  #navbar-toggle span:before {
     top: -10px;
   }
 
-  .nav-mobile span:after {
+  #navbar-toggle span:after {
     bottom: -10px;
   }
 
-  .nav-mobile span,
-  .nav-mobile span:before,
-  .nav-mobile span:after {
-    background: #ffffff;
-  }
-
-  .nav-mobile.active span {
+  #navbar-toggle.active span {
     background-color: transparent;
   }
 
-  .nav-mobile.active span:before,
-  .nav-mobile.active span:after {
+  #navbar-toggle.active span:before,
+  #navbar-toggle.active span:after {
     top: 0;
   }
 
-  .nav-mobile.active span:before {
+  #navbar-toggle.active span:before {
     transform: rotate(45deg);
+    top: 0;
   }
 
-  .nav-mobile.active span:after {
+  #navbar-toggle.active span:after {
     transform: rotate(-45deg);
-  }
-
-  @media only screen and (min-width: 800px) {
-    .nav-list {
-      display: block !important;
-      float: right;
-      height: auto !important;
-      padding: 0 !important;
-    }
-
-    .nav-list > li {
-      display: inline-block;
-      margin-left: 10px;
-    }
-
-    .nav-list > li:first-child {
-      margin-left: 0;
-    }
-
-    .nav-list > li > a {
-      line-height: 55px;
-    }
-
-    .nav-list > li > ul {
-      position: absolute;
-      left: 0;
-      top: 100%;
-      display: none;
-      margin: 0;
-      padding: 0;
-      z-index: 99;
-      float: left;
-      min-width: 200px;
-      text-align: left;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-top: none;
-    }
-
-    .nav-list > li > ul li {
-      display: block;
-    }
-
-    .nav-list > li > ul li a {
-      padding: 15px;
-      line-height: 20px;
-      color: #333;
-    }
-
-    .nav-list > li > ul li a:hover {
-      background-color: #f0f0f0;
-    }
-
-    .nav-list > li:hover > ul {
-      display: block;
-    }
+    top: 0;
   }
 </style>
