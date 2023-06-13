@@ -2,15 +2,30 @@
   import Navbar from '../../../components/Navbar.svelte';
   import { onMount, afterUpdate } from 'svelte';
   import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
+  import { getCookie } from '../../../utils/cookies';
+
 
   let loading = true;
   let data = null;
   const dataSlug = $page.params.snippetSlug;
+  onMount(async () => {
+    accessToken = getCookie('access_token');
 
+    if (!accessToken) {
+      goto('/login');
+    } else {
+      fetchUser();
+    }
+  });
   // Fetch data with the specified slug
   const fetchData = async () => {
     try {
-      const response = await fetch(`https://blogaxis-api.up.railway.app/api/v1/snippets/snippet/?slug=${dataSlug}`);
+      const response = await fetch(`https://blogaxis-api.up.railway.app/api/v1/snippets/snippet/?slug=${dataSlug}`, {
+        headers: {
+          Authorization: `Bearer ${getCookie('access_token')}`
+        }
+      });
       const responseData = await response.json();
       data = responseData.results[0]; // Get the first item from the results array
     } catch (error) {

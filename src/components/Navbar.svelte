@@ -31,6 +31,7 @@
   function handleLogout() {
     deleteCookie('access_token');
     isLoggedIn = false;
+    location.reload()
   }
 </script>
 
@@ -66,7 +67,7 @@
             <a href="/">Upload Snippet</a>
           </li>
           <li>
-            <a href="/">My Snippets</a>
+            <a href="/mysnippets">My Snippets</a>
           </li>
         {:else}
           <li>

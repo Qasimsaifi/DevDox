@@ -5,6 +5,7 @@
   import { goto } from '$app/navigation';
   import Navbar from '../../components/Navbar.svelte';
   import logo from '$lib/image/logo.png';
+  import MySnippets from '../../components/MYSnippets.svelte';
 
   let user = {};
   let userName = {};
@@ -69,7 +70,7 @@
     <p class="error">Failed to fetch user data.</p>
   {/if}
 </main>
-
+<MySnippets/>
 <style>
   main {
     max-width: 800px;

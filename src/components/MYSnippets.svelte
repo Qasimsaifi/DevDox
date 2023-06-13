@@ -1,54 +1,68 @@
 <!-- MySnippets.svelte -->
 <script>
-  // Importing the necessary components and functions
-  import Navbar from "../components/Navbar.svelte";
   import { onMount } from 'svelte';
   import { getCookie } from '../utils/cookies';
-  
-  // Initializing an empty array to store the snippets
+  import { goto } from '$app/navigation';
+
+  let user = {};
   let snippets = [];
-  let isLoading = true; // Flag to track loading state
+  let userName = {};
+  let isLoading = true;
 
-  // Using the onMount lifecycle function to execute code when the component is mounted
+  let accessToken;
+
   onMount(async () => {
-    // Check if access token is available
-    const accessToken = getCookie('access_token');
-    
-    try {
-      // Set loading state to true
-      isLoading = true;
-      
-      // Make the GET request to the API endpoint
-      const response = await fetch("https://blogaxis-api.up.railway.app/api/v1/snippets/snippet/", {
-        method: "GET",
-        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
-      });
+    accessToken = getCookie('access_token');
 
-      if (response.ok) {
-        // If the response is successful, parse the JSON data and store it in the snippets array
-        const data = await response.json();
-        snippets = data.results;
-        // Call the function to initialize Prism.js after the snippets are loaded
-        initializePrism();
-      } else {
-        // If the response is not successful, log the error
-        console.error("Error:", response.status);
-      }
-    } catch (error) {
-      // If an error occurs during the request, log the error
-      console.error("Error:", error);
-    } finally {
-      // Set loading state to false
-      isLoading = false;
+    if (!accessToken) {
+      goto('/login');
+    } else {
+      fetchUser();
     }
   });
 
-  function initializePrism() {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js';
-    document.head.appendChild(script);
+  async function fetchUser() {
+    try {
+      const response = await fetch('https://blogaxis-api.up.railway.app/api/v1/user', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        user = data;
+        userName = data.name;
+        fetchSnippets();
+      } else {
+        console.error('Failed to fetch user data');
+      }
+    } catch (error) {
+      console.error('Failed to fetch user data', error);
+    } finally {
+      isLoading = false;
+    }
   }
 
+  async function fetchSnippets() {
+    try {
+      const response = await fetch(`https://blogaxis-api.up.railway.app/api/v1/snippets/snippet/?author=${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+
+      if (response.ok) {
+        const snipdata = await response.json();
+        snippets = snipdata.results;
+        console.log(snippets);
+      } else {
+        console.error('Failed to fetch snippets');
+      }
+    } catch (error) {
+      console.error('Failed to fetch snippets', error);
+    }
+  }
   function copySnippet(code, event) {
     // Extract the code snippet without <pre> and <code> tags
     const extractedCode = code.replace(/<\/?(?:pre|code)[^>]*>/g, '');
@@ -89,34 +103,35 @@
   }
 </script>
 
-<!-- Rendering the Navbar component -->
-<Navbar/>
-
-<!-- Main content section -->
 <main>
   {#if isLoading}
-    <!-- Show loader while fetching data -->
     <div class="loader"><p>Loading...</p></div>
-  {:else if snippets.length > 0}
-    <!-- Displaying a list of snippets using CSS Grid -->
-    <div class="card-container">
-      {#each snippets as snippet (snippet.id)}
-        <div class="card">
-          <a href={"/snippet/"+snippet.slug}>
-            <h4>{snippet.title}</h4>
-          </a>
-          <div class="card-content">
-            <button class="copy-button" on:click={(event) => copySnippet(snippet.code_snippet, event)}>
-              <i class="fas fa-copy"></i>
-            </button>
-            {@html snippet.code_snippet}
-          </div>
-        </div>
-      {/each}
+  {:else if user}
+    <div class="profile">
+      <h1 class="snippet-heading">Your Snippet Collection {userName.full_name}</h1>
     </div>
+
+    {#if snippets.length > 0}
+      <div class="card-container">
+        {#each snippets as snippet (snippet.id)}
+          <div class="card">
+            <a href={"/snippet/" + snippet.slug}>
+              <h4>{snippet.title}</h4>
+            </a>
+            <div class="card-content">
+              <button class="copy-button" on:click={(event) => copySnippet(snippet.code_snippet, event)}>
+                <i class="fas fa-copy"></i>
+              </button>
+              {@html snippet.code_snippet}
+            </div>
+          </div>
+        {/each}
+      </div>
+    {:else}
+      <p>No snippets found.</p>
+    {/if}
   {:else}
-    <!-- If no snippets are found, display a message -->
-    <p>No snippets found.</p>
+    <p class="error">Failed to fetch user data.</p>
   {/if}
 </main>
 
@@ -189,5 +204,14 @@
     .card-container {
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
+  }
+  .snippet-heading {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
   }
 </style>
