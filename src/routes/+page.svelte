@@ -96,7 +96,7 @@
 <main>
   {#if isLoading}
     <!-- Show loader while fetching data -->
-    <div class="loader"><p>Loading...</p></div>
+    <div class="loader"></div>
   {:else if snippets.length > 0}
     <!-- Displaying a list of snippets using CSS Grid -->
     <div class="card-container">
@@ -125,7 +125,29 @@
   main {
     padding: 20px;
   }
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 600px;
+  }
 
+  .loader::after {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid #ccc;
+    border-top-color: #888;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
   .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -173,9 +195,7 @@
     margin-right: 5px;
   }
 
-  .loader p {
-    font-size: 24px;
-  }
+
 
   /* Responsive styles */
   @media (min-width: 768px) {

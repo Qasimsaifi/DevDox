@@ -35,7 +35,7 @@
         const data = await response.json();
         user = data;
         userName = data.name;
-        console.log(data)
+        console.log(data);
       } else {
         console.error('Failed to fetch user data');
       }
@@ -54,10 +54,8 @@
   {:else if user}
     <div class="profile">
       <div class="cover-photo">
-        <!-- eslint-disable-next-line -->
         <img src={logo} alt="" role="presentation"/>
       </div>
-      <!-- eslint-disable-next-line -->
       <img class="profile-picture" src={user.profile_picture} alt="" role="presentation"/>
       <div class="user-details">
         <h2>{userName.full_name}</h2>
@@ -159,5 +157,22 @@
     text-align: center;
     margin-top: 20px;
     color: #f00;
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 600px) {
+    .profile {
+      padding: 10px;
+    }
+
+    .profile-picture {
+      width: 100px;
+      height: 100px;
+      margin: -50px auto 10px;
+    }
+
+    .user-details h2 {
+      font-size: 20px;
+    }
   }
 </style>

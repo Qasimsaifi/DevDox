@@ -57,17 +57,17 @@
           <a href="/">Contact</a>
         </li>
         {#if isLoggedIn}
-          <li>
-            <a href="/profile">Profile</a>
-          </li>
+        <li>
+          <a href="/">Upload Snippet</a>
+        </li>
+        <li>
+          <a href="/mysnippets">My Snippets</a>
+        </li>
+        <li>
+          <a href="/profile">Profile</a>
+        </li>
           <li>
             <a href="/" on:click={handleLogout}>Logout</a>
-          </li>
-          <li>
-            <a href="/">Upload Snippet</a>
-          </li>
-          <li>
-            <a href="/mysnippets">My Snippets</a>
           </li>
         {:else}
           <li>
