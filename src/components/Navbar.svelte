@@ -58,7 +58,7 @@
         </li>
         {#if isLoggedIn}
         <li>
-          <a href="/">Upload Snippet</a>
+          <a href="/uploadsnippet">Upload Snippet</a>
         </li>
         <li>
           <a href="/mysnippets">My Snippets</a>
