@@ -34,6 +34,7 @@
         const data = await response.json();
         user = data;
         userName = data.name;
+        console.log(data)
       } else {
         console.error('Failed to fetch user data');
       }
@@ -59,7 +60,7 @@
       <img class="profile-picture" src={user.profile_picture} alt="" role="presentation"/>
       <div class="user-details">
         <h2>{userName.full_name}</h2>
-        <p class="username">@{user.email}</p>
+        <p class="username">{user.email}</p>
         <p class="mobile">Mobile: {user.mobile}</p>
         <!-- Display other user details as needed -->
       </div>

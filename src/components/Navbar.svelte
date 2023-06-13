@@ -30,8 +30,7 @@
 
   function handleLogout() {
     deleteCookie('access_token');
-    // Optional: Redirect to the login page after logout
-    // window.location.href = '/login';
+    isLoggedIn = false;
   }
 </script>
 

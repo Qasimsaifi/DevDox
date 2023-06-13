@@ -1,5 +1,7 @@
+<!-- login.page.svelte -->
 <script>
   import { setCookie, getCookie, deleteCookie } from '../../utils/cookies'; // Import cookie utility functions
+  import { goto } from '$app/navigation';
   import Navbar from '../../components/Navbar.svelte';
   let email = '';
   let password = '';
@@ -9,6 +11,9 @@
   function checkLoggedIn() {
     const accessToken = getCookie('access_token');
     isLoggedIn = !!accessToken;
+    if (isLoggedIn) {
+      goto('/');
+    }
   }
 
   async function handleLogin() {
@@ -26,6 +31,7 @@
         const accessToken = data.access;
         setCookie('access_token', accessToken);
         isLoggedIn = true;
+        goto('/');
         error = '';
       } else {
         error = 'Invalid email or password';
@@ -48,14 +54,13 @@
 
 <main>
   {#if isLoggedIn}
-    <h1>Welcome back!</h1>
-    <button on:click="{handleLogout}">Logout</button>
+
     <!-- Display the logged-in content here -->
   {:else}
     <h1>Login</h1>
 
     {#if error}
-      <p>{error}</p>
+      <p class="error">{error}</p>
     {/if}
 
     <form on:submit="{handleLogin}">
@@ -69,7 +74,7 @@
         <input type="password" bind:value="{password}" required />
       </label>
 
-      <button type="submit">Login</button>
+      <button class="login-btn" type="submit">Login</button>
     </form>
   {/if}
 </main>
@@ -81,8 +86,34 @@
     padding: 20px;
   }
 
-  input,
-  button {
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .login-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
+
+  .error {
+    color: #dc3545;
     margin-top: 10px;
   }
 </style>
