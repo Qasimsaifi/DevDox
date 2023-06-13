@@ -4,12 +4,9 @@
   import Navbar from "../components/Navbar.svelte";
   import { onMount } from 'svelte';
   import { getCookie } from '../utils/cookies';
-  
-  // Initializing an empty array to store the snippets
+  let apiKey = import.meta.env.VITE_API_URL;
   let snippets = [];
-  let isLoading = true; // Flag to track loading state
-
-  // Using the onMount lifecycle function to execute code when the component is mounted
+  let isLoading = true; 
   onMount(async () => {
     // Check if access token is available
     const accessToken = getCookie('access_token');
@@ -19,26 +16,21 @@
       isLoading = true;
       
       // Make the GET request to the API endpoint
-      const response = await fetch("https://devdox.up.railway.app/api/v1/snippets/snippet/", {
+      const response = await fetch(`${apiKey}api/v1/snippets/snippet/`, {
         method: "GET",
         headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
       });
 
       if (response.ok) {
-        // If the response is successful, parse the JSON data and store it in the snippets array
         const data = await response.json();
         snippets = data.results;
-        // Call the function to initialize Prism.js after the snippets are loaded
         initializePrism();
       } else {
-        // If the response is not successful, log the error
         console.error("Error:", response.status);
       }
     } catch (error) {
-      // If an error occurs during the request, log the error
       console.error("Error:", error);
     } finally {
-      // Set loading state to false
       isLoading = false;
     }
   });

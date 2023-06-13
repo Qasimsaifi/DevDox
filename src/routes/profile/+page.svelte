@@ -6,7 +6,7 @@
   import Navbar from '../../components/Navbar.svelte';
   import logo from '$lib/image/logo.png';
   import MySnippets from '../../components/MYSnippets.svelte';
-
+  let apiKey = import.meta.env.VITE_API_URL;
   let user = {};
   let userName = {};
   let isLoading = true;
@@ -25,7 +25,7 @@
 
   async function fetchUser() {
     try {
-      const response = await fetch('https://devdox.up.railway.app/api/v1/user', {
+      const response = await fetch(`${apiKey}api/v1/user`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }

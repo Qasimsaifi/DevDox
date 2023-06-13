@@ -2,6 +2,7 @@
   import logo from '$lib/image/logo.png';
   import { onMount } from 'svelte';
   import { getCookie, deleteCookie } from '../utils/cookies.js';
+  let apiKey = import.meta.env.VITE_API_URL;
 
   let isNavOpen = false;
   export let isLoggedIn = false;

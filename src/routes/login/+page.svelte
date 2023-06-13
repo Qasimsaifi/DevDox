@@ -3,6 +3,7 @@
   import { setCookie, getCookie, deleteCookie } from '../../utils/cookies';
   import { goto } from '$app/navigation';
   import Navbar from '../../components/Navbar.svelte';
+  let apiKey = import.meta.env.VITE_API_URL;
 
   let email = '';
   let password = '';
@@ -19,7 +20,7 @@
 
   async function handleLogin() {
     try {
-      const response = await fetch('https://devdox.up.railway.app/api/v1/snippets/gettoken/', {
+      const response = await fetch(`${apiKey}api/v1/snippets/gettoken/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
