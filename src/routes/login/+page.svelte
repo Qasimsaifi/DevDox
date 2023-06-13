@@ -1,8 +1,9 @@
 <!-- login.page.svelte -->
 <script>
-  import { setCookie, getCookie, deleteCookie } from '../../utils/cookies'; // Import cookie utility functions
+  import { setCookie, getCookie, deleteCookie } from '../../utils/cookies';
   import { goto } from '$app/navigation';
   import Navbar from '../../components/Navbar.svelte';
+
   let email = '';
   let password = '';
   let error = '';
@@ -29,7 +30,9 @@
       if (response.ok) {
         const data = await response.json();
         const accessToken = data.access;
-        setCookie('access_token', accessToken);
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 60); // Set the expiration date to 7 days from now
+        setCookie('access_token', accessToken, { expires: expirationDate });
         isLoggedIn = true;
         goto('/');
         error = '';
@@ -54,7 +57,6 @@
 
 <main>
   {#if isLoggedIn}
-
     <!-- Display the logged-in content here -->
   {:else}
     <h1>Login</h1>
@@ -110,7 +112,6 @@
     margin-top: 20px;
     cursor: pointer;
   }
-
 
   .error {
     color: #dc3545;
