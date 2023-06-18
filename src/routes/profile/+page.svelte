@@ -52,9 +52,6 @@
     <div class="loader"></div>
   {:else if user}
     <div class="profile">
-      <div class="cover-photo">
-        <img src={logo} alt="" role="presentation"/>
-      </div>
       <img class="profile-picture" src={user.profile_picture} alt="" role="presentation"/>
       <div class="user-details">
         <h2>{userName.full_name}</h2>
@@ -62,6 +59,7 @@
         <p class="mobile">Mobile: {user.mobile}</p>
         <!-- Display other user details as needed -->
       </div>
+      
     </div>
   {:else}
     <p class="error">Failed to fetch user data.</p>
@@ -92,32 +90,20 @@
     border-top-color: #888;
     animation: spin 1s linear infinite;
   }
-
+  
   @keyframes spin {
     to {
       transform: rotate(360deg);
     }
   }
-
+  
   .profile {
+    margin-top: 32%;
     text-align: center;
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .cover-photo {
-    height: 200px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-  }
-
-  .cover-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 
   .profile-picture {

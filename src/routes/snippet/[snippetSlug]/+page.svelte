@@ -15,8 +15,13 @@
   });
 
   const fetchData = async () => {
+    let accessToken = getCookie("access_token")
+
     try {
-      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/snippet/?slug=${dataSlug}`);
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/snippet/?slug=${dataSlug}`,{
+        method: "GET",
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
+      });
       const responseData = await response.json();
       data = responseData.results[0];
       fetchComments(); // Fetch comments for the specific snippet
