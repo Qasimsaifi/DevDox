@@ -55,17 +55,17 @@
 
 <Navbar {isLoggedIn} />
 
-<main>
+<main class="container border log-cont">
+  <h3 class="log-heading">Login</h3>
   {#if isLoggedIn}
     <!-- Display the logged-in content here -->
   {:else}
-    <h1>Login</h1>
-
-    {#if error}
-      <p class="error">{error}</p>
-    {/if}
-
-    <form on:submit="{handleLogin}">
+  
+  {#if error}
+  <p class="error">{error}</p>
+  {/if}
+  
+  <form class="log-container log-form" on:submit="{handleLogin}">
       <label>
         Email:
         <input type="email" bind:value="{email}" required />
@@ -76,45 +76,7 @@
         <input type="password" bind:value="{password}" required />
       </label>
 
-      <button class="login-btn" type="submit">Login</button>
+      <button type="submit">Login</button>
     </form>
   {/if}
 </main>
-
-<style>
-  main {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    margin-top: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-
-  .login-btn {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    margin-top: 20px;
-    cursor: pointer;
-  }
-
-  .error {
-    color: #dc3545;
-    margin-top: 10px;
-  }
-</style>

@@ -54,7 +54,6 @@
       if (response.ok) {
         const snipdata = await response.json();
         snippets = snipdata.results;
-        console.log(snippets);
       } else {
         console.error('Failed to fetch snippets');
       }

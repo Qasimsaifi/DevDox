@@ -9,7 +9,7 @@
   let user = {};
   let userName = {};
   let isLoading = true;
-
+  let snippetsCount = {}
   let accessToken;
 
   onMount(async () => {
@@ -19,6 +19,7 @@
       goto('/login');
     } else {
       fetchUser();
+      
     }
   });
 
@@ -34,7 +35,7 @@
         const data = await response.json();
         user = data;
         userName = data.name;
-        console.log(data);
+        fetchSnippets()
       } else {
         console.error('Failed to fetch user data');
       }
@@ -44,6 +45,28 @@
       isLoading = false;
     }
   }
+
+  async function fetchSnippets() {
+    try {
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/snippet/?author=${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+
+      if (response.ok) {
+        const snipcount = await response.json();
+        snippetsCount = snipcount.count
+        console.log(user)
+        console.log(snipcount)
+      } else {
+        console.error('Failed to fetch snippets');
+      }
+    } catch (error) {
+      console.error('Failed to fetch snippets', error);
+    }
+  }
+
 </script>
 
 <Navbar/>
@@ -57,6 +80,16 @@
         <h2>{userName.full_name}</h2>
         <p class="username">{user.email}</p>
         <p class="mobile">Mobile: {user.mobile}</p>
+        <div class="problem-stats">
+          <div class="problem-stat">
+              <h2>{snippetsCount}</h2>
+              <p>Your Snippets</p>
+          </div>
+          <div class="problem-stat">
+              <h2>{snippetsCount}</h2>
+              <p>Saved Snippets</p>
+          </div>
+      </div>
         <!-- Display other user details as needed -->
       </div>
       
@@ -143,6 +176,21 @@
     margin-top: 20px;
     color: #f00;
   }
+  .problem-stats {
+  display: flex;
+  justify-content: space-around;
+}
+
+.problem-stat {
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 10px;
+}
+
+.problem-stat h2 {
+  margin-bottom: 5px;
+}
+
 
   /* Responsive Styles */
   @media (max-width: 600px) {
