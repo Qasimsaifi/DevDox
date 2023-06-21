@@ -110,7 +110,7 @@
   // Function to fetch comments for the specific snippet
   async function fetchComments() {
     try {
-      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/comments/?ordering=created_at&snippet=${data.id}`);
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/comments/?ordering=-created_at&snippet=${data.id}`);
       const responseData = await response.json();
       comments = responseData;
       
