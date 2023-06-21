@@ -64,7 +64,7 @@
       formData.append('is_private', isPrivate ? 1 : 0);
       formData.append('author', author);
 
-      const response = await fetch('https://devdox.up.railway.app/v1/snippets/snippet/', {
+      const response = await fetch('https://devdox.up.railway.app/api/v1/snippets/snippet/', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`
