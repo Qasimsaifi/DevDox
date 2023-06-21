@@ -4,44 +4,22 @@
   import { getCookie } from "../../../utils/cookies";
   import { page } from "$app/stores";
   import Navbar from "../../../components/Navbar.svelte";
+  import { fetchUser} from "../../../utils/fetchData";
 
   let loading = true;
   let data = null;
   let comments = [];
   let user;
-  let userInfo = [];
+  let userInfo;
   const dataSlug = $page.params.snippetSlug;
   let commentContent;
 
   onMount(async () => {
-    fetchUser();
     fetchData();
+    user = await fetchUser();
+    userInfo = user.name;
   });
 
-  async function fetchUser() {
-    let accessToken = getCookie("access_token");
-    try {
-      const response = await fetch(
-        `https://devdox.up.railway.app/api/v1/user`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        user = data;
-        userInfo = data.name;
-      } else {
-        console.error("Failed to fetch user data");
-      }
-    } catch (error) {
-      console.error("Failed to fetch user data", error);
-    } finally {
-    }
-  }
   const fetchData = async () => {
     let accessToken = getCookie("access_token");
 
@@ -179,15 +157,15 @@
       <h4>{data.title}</h4>
       <div>{@html data.content}</div>
       <main class="code-snippet">
-  <button
-    class="copy-button"
-    on:click={(event) => copySnippet(data.code_snippet, event)}
-  >
-    <i class="fas fa-copy" />
-  </button>
+        <button
+          class="copy-button"
+          on:click={(event) => copySnippet(data.code_snippet, event)}
+        >
+          <i class="fas fa-copy" />
+        </button>
 
-  {@html data.code_snippet}
-</main>
+        {@html data.code_snippet}
+      </main>
     </div>
   </div>
 
@@ -197,11 +175,7 @@
     <h3 class="attractive-heading">Comments</h3>
     {#each comments as comment (comment.id)}
       <div class="comment">
-        <img
-          class="comment-avatar"
-          src={comment.author_picture}
-          alt=""
-        />
+        <img class="comment-avatar" src={comment.author_picture} alt="" />
         <div class="comment-content">
           <div class="comment-header">
             <div class="comment-author">{comment.author_name}</div>
@@ -218,9 +192,15 @@
         <h3>Add a Comment</h3>
         <form on:submit={submitComment}>
           <div class="form-group input-with-button">
-            <input bind:value={commentContent} type="text" id="comment" name="comment" required />
+            <input
+              bind:value={commentContent}
+              type="text"
+              id="comment"
+              name="comment"
+              required
+            />
             <button class="button-com icon" type="submit">
-              <i class="fas fa-paper-plane"></i>
+              <i class="fas fa-paper-plane" />
             </button>
           </div>
         </form>
@@ -327,40 +307,37 @@
   }
 
   .comment-form .input-with-button {
-  position: relative;
-  border: 2px solid #6e6f74;
-  border-radius: 5px;
-}
-
-.comment-form input[type="text"] {
-  background: transparent;
-  border: none;
-  height: 100%;
-  outline: none;
-  display: inline-block;
-  width: 87%;
-}
-
-.comment-form .icon {
-  color: #464646;
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  cursor: pointer;
-  display: inline-block;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
+    position: relative;
+    border: 2px solid #6e6f74;
+    border-radius: 5px;
+  }
 
   .comment-form input[type="text"] {
-    width: 70%;
+    background: transparent;
+    border: none;
+    height: 100%;
+    outline: none;
+    display: inline-block;
+    width: 87%;
   }
-}
 
+  .comment-form .icon {
+    color: #464646;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .comment-form input[type="text"] {
+      width: 70%;
+    }
+  }
 
   .attractive-heading {
     margin-bottom: 20px;
   }
-  
 </style>
