@@ -8,12 +8,36 @@
   let loading = true;
   let data = null;
   let comments = [];
+  let user = [];
+  let userInfo = [];
   const dataSlug = $page.params.snippetSlug;
 
   onMount(async () => {
+    fetchUser();
     fetchData();
   });
 
+  async function fetchUser() {
+    let accessToken = getCookie("access_token")
+    try {
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/user`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        user = data;
+        userInfo = data.name;
+      } else {
+        console.error('Failed to fetch user data');
+      }
+    } catch (error) {
+      console.error('Failed to fetch user data', error);
+    } finally {
+    }
+  }
   const fetchData = async () => {
     let accessToken = getCookie("access_token")
 
@@ -86,7 +110,7 @@
   // Function to fetch comments for the specific snippet
   async function fetchComments() {
     try {
-      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/comments/?snippet=${data.id}`);
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/comments/?ordering=created_at&snippet=${data.id}`);
       const responseData = await response.json();
       comments = responseData;
       
@@ -102,7 +126,6 @@
   async function submitComment(event) {
     event.preventDefault();
     const commentContent = event.target.elements.comment.value;
-
     try {
       const response = await fetch('https://devdox.up.railway.app/api/v1/snippets/comments/', {
         method: 'POST',
@@ -111,15 +134,21 @@
         },
         body: JSON.stringify({
           snippet: data.id,
+          author : user.id,
+          author_name : userInfo.full_name,
+          author_email : user.email,
+          author_picture : user.profile_picture,
           content: commentContent
         })
       });
 
       if (response.ok) {
+        console.log(user.id)
         event.target.elements.comment.value = ''; // Clear the comment input field
         fetchComments(); // Fetch comments again to update the UI
       } else {
         console.error('Comment submission failed');
+        console.log(user.id)
       }
     } catch (error) {
       console.error(error);
