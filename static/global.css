@@ -134,3 +134,7 @@ h4 {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+.button-com{
+  width: 60px !important;
+  margin-bottom: 5px !important;
+}

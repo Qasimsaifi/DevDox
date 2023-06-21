@@ -8,7 +8,7 @@
   let loading = true;
   let data = null;
   let comments = [];
-  let user = [];
+  let user;
   let userInfo = [];
   const dataSlug = $page.params.snippetSlug;
 
@@ -124,13 +124,17 @@
 
   // Function to handle comment submission
   async function submitComment(event) {
+    let accessToken = getCookie("access_token")
+
     event.preventDefault();
     const commentContent = event.target.elements.comment.value;
     try {
       const response = await fetch('https://devdox.up.railway.app/api/v1/snippets/comments/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+
         },
         body: JSON.stringify({
           snippet: data.id,
@@ -182,14 +186,19 @@
         </div>
       </div>
     {/each}
+    {#if user}
+      
     <form on:submit={submitComment}>
       <div class="comment-input">
         <input type="text" name="comment" placeholder="Enter your comment" />
-        <button type="submit">
+        <button class="button-com" type="submit">
           <i class="fas fa-paper-plane"></i>
         </button>
       </div>
     </form>
+    {:else}
+    <h6 class="border radius">Login for comment <a href="/login">Login</a></h6>
+    {/if}
   </div>
 {:else}
   <p>Not found</p>
