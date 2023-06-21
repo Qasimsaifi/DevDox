@@ -165,7 +165,7 @@
 {#if loading}
   <p>Loading...</p>
 {:else if data}
-  <div class="card">
+  <div class="container card-cont">
     <div class="card-content">
       <h4>{data.title}</h4>
       <div>{@html data.content}</div>
@@ -177,7 +177,7 @@
       </div>
     </div>
   </div>
-  <div class="comments-section">
+  <div class="container">
     <h4>Comments</h4>
     {#each comments as comment (comment.id)}
       <div class="comment">
@@ -211,20 +211,17 @@ p {
 }
 
 /* Card */
-.card {
-  padding: 20px;
-  margin-bottom: 20px;
-  width: 80vw;
-  margin-left: auto;
-  margin-right: auto;
+.card-cont {
+  
   background-color: #1e1e1e;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   color: #fff;
+  margin-top: 70px;
 }
 
 /* Card title */
-.card h4 {
+.card-cont h4 {
   font-size: 24px;
   margin-bottom: 10px;
 }
