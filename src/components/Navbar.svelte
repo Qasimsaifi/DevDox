@@ -2,6 +2,7 @@
   import logo from "$lib/image/logo.png";
   import { onMount } from "svelte";
   import { getCookie, deleteCookie } from "../utils/cookies.js";
+  import { fetchUser } from "../utils/fetchData.js";
 
   let isNavOpen = false;
   export let isLoggedIn = false;
@@ -9,8 +10,8 @@
   onMount(() => {
     const navbarToggle = document.getElementById("navbar-toggle");
     isLoggedIn = !!getCookie("access_token");
-    console.log(isLoggedIn);
   });
+
 
   function handleLogout() {
     deleteCookie("access_token");

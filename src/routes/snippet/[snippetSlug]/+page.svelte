@@ -162,10 +162,14 @@
     <h3 class="attractive-heading">Comments</h3>
     {#each comments as comment (comment.id)}
       <div class="comment">
-        <img class="comment-avatar" src={comment.author_picture} alt="" />
+        <a href={`/profile/${comment.author}`}>
+          <img class="comment-avatar" src={comment.author_picture} alt="" />
+        </a>
         <div class="comment-content">
           <div class="comment-header">
-            <div class="comment-author">{comment.author_name}</div>
+            <a href={`/profile/${comment.author}`}>
+              <div class="comment-author">{comment.author_name}</div>
+            </a>
             <div class="comment-date">{comment.created_at}</div>
           </div>
           <div class="comment-text">
@@ -207,7 +211,9 @@
   p {
     font-size: 20px;
   }
-
+  a{
+    background-image: #ffffff !important;
+  }
   /* Card */
   .card-cont {
     border-radius: 10px;

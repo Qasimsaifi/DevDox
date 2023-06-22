@@ -3,8 +3,9 @@
   import { onMount } from 'svelte';
   import { getCookie } from '../utils/cookies';
   import { goto } from '$app/navigation';
-  import {postAuthData} from '../utils/authReq'
-  import {fetchUser} from '../utils/fetchData'
+  import { postAuthData } from '../utils/authReq';
+  import { fetchUser } from '../utils/fetchData';
+
   let user = {};
   let isLoading = true;
 
@@ -13,7 +14,8 @@
   let slug = '';
   let content = '';
   let codeSnippet = '';
-  let image = null;
+  let language = 'javascript';
+  let files = [];
   let createdAt = new Date().toISOString(); // Set default value to current date
   let updatedAt = new Date().toISOString(); // Set default value to current date
   let isPrivate = false;
@@ -25,14 +27,18 @@
     if (!accessToken) {
       goto('/login');
     } else {
-      getUser();
+      await getUser();
     }
   });
 
   async function getUser() {
-    user = await fetchUser();
-    author = await user.id
-    isLoading = false
+    try {
+      user = await fetchUser();
+      author = user.id;
+      isLoading = false;
+    } catch (error) {
+      console.error('Failed to fetch user data.', error);
+    }
   }
 
   async function uploadSnippet() {
@@ -43,15 +49,22 @@
       formData.append('slug', slug);
       formData.append('content', content);
       formData.append('code_snippet', codeSnippet);
-      formData.append('image', image);
+      formData.append('language', language);
+      formData.append('image', files[0]);
       formData.append('created_at', createdAt);
       formData.append('updated_at', updatedAt);
       formData.append('is_private', isPrivate ? 1 : 0);
       formData.append('author', author);
-      postAuthData('https://devdox.up.railway.app/api/v1/snippets/snippet/', formData , "POST")
-      isLoading = false
-      location.reload();
 
+      const jsonData = {};
+      for (let [key, value] of formData.entries()) {
+        jsonData[key] = value;
+      }
+      const data = JSON.stringify(jsonData);
+
+      await postAuthData('https://devdox.up.railway.app/api/v1/snippets/snippet/', data, 'POST');
+      // console.log(formData);
+      isLoading = false;
     } catch (error) {
       console.error('Failed to upload snippet', error);
     }
@@ -79,8 +92,8 @@
       <label for="codeSnippet">Code Snippet:</label>
       <textarea id="codeSnippet" bind:value={codeSnippet} required></textarea>
 
-      <!-- <label for="image">Image:</label>
-      <input type="file" id="image" bind:files={image} accept="image/*"> -->
+      <label for="image">Image:</label>
+      <input type="file" id="image" bind:files >
 
       <label for="createdAt">Created At:</label>
       <input type="text" id="createdAt" value={createdAt} readonly>
@@ -92,6 +105,11 @@
       <select id="isPrivate" bind:value={isPrivate}>
         <option value="false">Public</option>
         <option value="true">Private</option>
+      </select>
+      <label for="language">Is Private:</label>
+      <select id="language" bind:value={language}>
+        <option value="python">Python</option>
+        <option value="javascript">Javascript</option>
       </select>
 
       <label for="author">Author:</label>

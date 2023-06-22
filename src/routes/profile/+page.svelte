@@ -24,7 +24,6 @@
 
   // Call the getUser function
 
-  console.log(user);
   onMount(async () => {
     accessToken = getCookie("access_token");
 

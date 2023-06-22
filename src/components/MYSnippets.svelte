@@ -22,7 +22,7 @@
 
   async function fetchUser() {
     try {
-      const response = await fetch(`https://devdox.up.railway.app/api/v1/user`, {
+      const response = await fetch(`https://devdox.up.railway.app/api/v1/user/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -101,7 +101,7 @@
   }
 </script>
 
-<main>
+<main class="mysnip-cont">
   {#if isLoading}
     <div class="loader"></div>
   {:else if user}
@@ -133,8 +133,3 @@
   {/if}
 </main>
 
-<!-- Styling for the main content section -->
-<style>
-
- 
-</style>

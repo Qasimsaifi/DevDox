@@ -4,7 +4,31 @@ export async function fetchUser() {
   let accessToken = getCookie("access_token");
   try {
     const response = await fetch(
-      `https://devdox.up.railway.app/api/v1/user`,
+      `https://devdox.up.railway.app/api/v1/user/`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      
+      return data;
+    } else {
+      console.error("Failed to fetch user data");
+    }
+  } catch (error) {
+    console.error("Failed to fetch user data", error);
+  } finally {
+  }
+}
+export async function fetchPublicUser(user_id) {
+  let accessToken = getCookie("access_token");
+  try {
+    const response = await fetch(
+      `https://devdox.up.railway.app/api/v1/user/public/publicuser/${user_id}/`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
