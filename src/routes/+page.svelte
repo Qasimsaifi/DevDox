@@ -100,7 +100,12 @@
             <button class="copy-button" on:click={(event) => copySnippet(snippet.code_snippet, event)}>
               <i class="fas fa-copy"></i>
             </button>
-            {@html snippet.code_snippet}
+            <pre class={`language-${snippet.language}`}>
+              <code>
+
+                {@html snippet.code_snippet}
+              </code>
+            </pre>
           </div>
         </div>
       {/each}

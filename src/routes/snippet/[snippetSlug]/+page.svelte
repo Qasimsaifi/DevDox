@@ -150,8 +150,12 @@
         >
           <i class="fas fa-copy" />
         </button>
-
-        {@html data.code_snippet}
+<pre class={`language-${data.language}`}>
+  <code>
+{data.code_snippet}
+    <!-- {@html data.code_snippet} -->
+  </code>
+</pre>
       </main>
     </div>
   </div>
