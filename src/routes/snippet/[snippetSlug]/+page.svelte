@@ -5,6 +5,7 @@
   import { page } from "$app/stores";
   import Navbar from "../../../components/Navbar.svelte";
   import { fetchUser} from "../../../utils/fetchData";
+  import { postAuthData } from "../../../utils/authReq";
 
   let loading = true;
   let data = null;
@@ -110,37 +111,23 @@
 
   // Function to handle comment submission
   async function submitComment(event) {
-    let accessToken = getCookie("access_token");
 
     event.preventDefault();
+
     try {
-      const response = await fetch(
-        "https://devdox.up.railway.app/api/v1/snippets/comments/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
+      let formData = JSON.stringify({
             snippet: data.id,
             author: user.id,
             author_name: userInfo.full_name,
             author_email: user.email,
             author_picture: user.profile_picture,
             content: commentContent,
-          }),
-        }
-      );
+          })
 
-      if (response.ok) {
-        console.log(user.id);
-        event.target.elements.comment.value = ""; // Clear the comment input field
-        fetchComments(); // Fetch comments again to update the UI
-      } else {
-        console.error("Comment submission failed");
-        console.log(user.id);
-      }
+      postAuthData('https://devdox.up.railway.app/api/v1/snippets/comments/' , formData , "POST")
+      fetchComments()
+      commentContent = ""
+      
     } catch (error) {
       console.error(error);
     }

@@ -3,6 +3,8 @@
   import { onMount } from 'svelte';
   import { getCookie } from '../utils/cookies';
   import { goto } from '$app/navigation';
+  import {postAuthData} from '../utils/authReq'
+  import {fetchUser} from '../utils/fetchData'
   let user = {};
   let isLoading = true;
 
@@ -23,31 +25,14 @@
     if (!accessToken) {
       goto('/login');
     } else {
-      fetchUser();
+      getUser();
     }
   });
 
-  async function fetchUser() {
-    try {
-      const response = await fetch(`https://devdox.up.railway.app/api/v1/user`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        user = data;
-        author = user.id;
-        console.log(data);
-      } else {
-        console.error('Failed to fetch user data');
-      }
-    } catch (error) {
-      console.error('Failed to fetch user data', error);
-    } finally {
-      isLoading = false;
-    }
+  async function getUser() {
+    user = await fetchUser();
+    author = await user.id
+    isLoading = false
   }
 
   async function uploadSnippet() {
@@ -63,30 +48,10 @@
       formData.append('updated_at', updatedAt);
       formData.append('is_private', isPrivate ? 1 : 0);
       formData.append('author', author);
+      postAuthData('https://devdox.up.railway.app/api/v1/snippets/snippet/', formData , "POST")
+      isLoading = false
+      location.reload();
 
-      const response = await fetch('https://devdox.up.railway.app/api/v1/snippets/snippet/', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        body: formData
-      });
-
-      if (response.ok) {
-        console.log('Snippet uploaded successfully');
-        isLoading = false;
-        // Reset the form fields
-        title = '';
-        slug = '';
-        content = '';
-        codeSnippet = '';
-        image = null;
-        createdAt = new Date().toISOString();
-        updatedAt = new Date().toISOString();
-        isPrivate = false;
-      } else {
-        console.error('Failed to upload snippet');
-      }
     } catch (error) {
       console.error('Failed to upload snippet', error);
     }
@@ -97,8 +62,8 @@
   {#if isLoading}
     <div class="loader"></div>
   {:else if user}
-    <div class="profile">
-      <h1 class="upload-heading">Upload Snippet</h1>
+    <div class="snippet-cont upload-heading">
+      <h1 class="snippet-heading">Upload Snippet</h1>
     </div>
 
     <form on:submit|preventDefault={uploadSnippet}>
@@ -169,17 +134,10 @@
     }
   }
 
-  .profile {
-    text-align: center;
-  }
+
 
   .upload-heading {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    text-transform: uppercase;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 70px;
   }
 
   form {
