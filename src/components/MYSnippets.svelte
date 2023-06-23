@@ -7,6 +7,7 @@
   let snippets = [];
   let userName = {};
   let isLoading = true;
+  let page = 1;
 
   let accessToken;
 
@@ -61,6 +62,7 @@
       console.error('Failed to fetch snippets', error);
     }
   }
+
   function copySnippet(code, event) {
     // Extract the code snippet without <pre> and <code> tags
     const extractedCode = code.replace(/<\/?(?:pre|code)[^>]*>/g, '');
@@ -130,6 +132,7 @@
           </div>
         {/each}
       </div>
+      
     {:else}
       <p>No snippets found.</p>
     {/if}

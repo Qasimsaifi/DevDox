@@ -12,7 +12,7 @@
   import Editor from '@tinymce/tinymce-svelte'
   let user = {};
   let isLoading = true;
-  let code = "";
+  let code;
 
   let apiKey = "57uq22dj8wgzh3n9989668cmek929nyrzj4dq0rs40funcv6";
   let conf = {
@@ -46,9 +46,16 @@
   let content = "";
   let language = "javascript";
   let files = []; // Set default value to current date
-  let isPrivate = false;
+  let isPrivate = 1;
   let author = null;
-  let value;
+  let value = `
+    // This is the starter code
+    function helloWorld() {
+      console.log("Hello, World!");
+    }
+    
+    helloWorld();
+  `;
   let editorLanguage = javascript();
   let buttonValue = "Python";
 
@@ -56,6 +63,8 @@
     if (buttonValue == "Python") {
       buttonValue = "Javascript";
       editorLanguage = python();
+      value = `print("Hello world");
+  `;
       console.log("language is py  now");
     } else {
       buttonValue = "Python";
@@ -95,7 +104,7 @@
       formData.append("code_snippet", value);
       formData.append("language", language);
       formData.append("image", files[0]);
-      formData.append("is_private", isPrivate ? 1 : 0);
+      formData.append("is_private", isPrivate);
       formData.append("author", author);
 
       const jsonData = {};
@@ -109,7 +118,7 @@
         data,
         "POST"
       );
-      // console.log(formData);
+      console.log(data);
       isLoading = false;
     } catch (error) {
       console.error("Failed to upload snippet", error);
@@ -142,25 +151,25 @@
         <button on:click={changeEditorLanguage}>{buttonValue}</button>
 
         <CodeMirror
-          bind:value
-          lang={editorLanguage}
-          styles={{
-            "&": {
-              width: "100%",
-              height: "80vh",
-            },
-          }}
-          theme={oneDark}
-        />
+  bind:value
+  lang={editorLanguage}
+  styles={{
+    "&": {
+      width: "100%",
+      height: "80vh",
+    },
+  }}
+  theme={oneDark}
+/>
       </div>
       <label for="image">Image:</label>
       <input type="file" id="image" bind:files />
       <label for="isPrivate">Is Private:</label>
       <select id="isPrivate" bind:value={isPrivate}>
-        <option value="false">Public</option>
-        <option value="true">Private</option>
+        <option value=0>Public</option>
+        <option value=1>Private</option>
       </select>
-      <label for="language">Is Private:</label>
+      <label for="language">Snippet Language:</label>
       <select id="language" bind:value={language}>
         <option value="python">Python</option>
         <option value="javascript">Javascript</option>
@@ -178,13 +187,13 @@
 
 <!-- Styling for the main content section -->
 <style>
+  
   .editor {
     margin-top: 100px;
   }
-  /* .editor-container{
-    width: 60vw !important;
-    margin-right: 15vw !important;
-  } */
+  .editor-container{
+    font-size: 16px;
+  }
   .loader {
     display: flex;
     justify-content: center;
