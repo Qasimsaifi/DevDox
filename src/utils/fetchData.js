@@ -63,7 +63,7 @@ export async function fetchSnippets(user_id) {
 
     if (response.ok) {
       const snipcount = await response.json();
-      const snippetsCount = snipcount.count;
+      const snippetsCount = snipcount
       return snippetsCount
       
     } else {

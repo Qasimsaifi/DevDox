@@ -60,11 +60,11 @@
         <p class="mobile">Mobile: {user.mobile}</p>
         <div class="problem-stats">
           <div class="problem-stat">
-            <h2>{snippetsCount}</h2>
+            <h2>{snippetsCount.length}</h2>
             <p>Your Snippets</p>
           </div>
           <div class="problem-stat">
-            <h2>{snippetsCount}</h2>
+            <h2>{snippetsCount.length}</h2>
             <p>Saved Snippets</p>
           </div>
         </div>

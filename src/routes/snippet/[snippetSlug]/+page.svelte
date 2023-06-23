@@ -35,7 +35,7 @@
         }
       );
       const responseData = await response.json();
-      data = responseData.results[0];
+      data = responseData[0];
       fetchComments(); // Fetch comments for the specific snippet
     } catch (error) {
       console.error(error);
@@ -144,18 +144,23 @@
       <h4>{data.title}</h4>
       <div>{@html data.content}</div>
       <main class="code-snippet">
+        {#if data.author == user.id}
+        <button>
+
+          <a href={"/update/" + data.slug}>
+            <i class="fas fa-edit" />
+            
+          </a>
+        </button>
+        {/if}
         <button
           class="copy-button"
           on:click={(event) => copySnippet(data.code_snippet, event)}
         >
           <i class="fas fa-copy" />
         </button>
-<pre class={`language-${data.language}`}>
-  <code>
-{data.code_snippet}
-    <!-- {@html data.code_snippet} -->
-  </code>
-</pre>
+
+    {@html data.code_snippet}
       </main>
     </div>
   </div>

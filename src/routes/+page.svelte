@@ -1,10 +1,10 @@
-<!-- MySnippets.svelte -->
+
 <script>
   // Importing the necessary components and functions
   import Navbar from "../components/Navbar.svelte";
   import { onMount } from 'svelte';
   import { getCookie } from '../utils/cookies';
-  let snippets = [];
+  let snippets;
   let isLoading = true; 
   onMount(async () => {
     // Check if access token is available
@@ -22,7 +22,7 @@
 
       if (response.ok) {
         const data = await response.json();
-        snippets = data.results;
+        snippets = data
         initializePrism();
       } else {
         console.error("Error:", response.status);
