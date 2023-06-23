@@ -138,20 +138,21 @@
 
 {#if loading}
   <p>Loading...</p>
-{:else if data}
+{:else if data && user}
   <div class="container card-cont">
     <div class="">
       <h4>{data.title}</h4>
       <div>{@html data.content}</div>
       <main class="code-snippet">
         {#if data.author == user.id}
-        <button>
+        
 
           <a href={"/update/" + data.slug}>
+            <button>
             <i class="fas fa-edit" />
-            
+
+            </button>
           </a>
-        </button>
         {/if}
         <button
           class="copy-button"
