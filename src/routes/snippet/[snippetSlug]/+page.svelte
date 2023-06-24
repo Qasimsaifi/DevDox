@@ -4,26 +4,32 @@
   import { getCookie } from "../../../utils/cookies";
   import { page } from "$app/stores";
   import Navbar from "../../../components/Navbar.svelte";
-  import { fetchUser} from "../../../utils/fetchData";
+  import { fetchUser } from "../../../utils/fetchData";
   import { postAuthData } from "../../../utils/authReq";
+  import CodeMirror from "svelte-codemirror-editor";
+  import { javascript } from "@codemirror/lang-javascript";
+  import { python } from "@codemirror/lang-python";
+  import { oneDark } from "@codemirror/theme-one-dark";
 
-  let loading = true;
+  let isLoading = true;
   let data = null;
   let comments = [];
   let user;
   let userInfo;
   const dataSlug = $page.params.snippetSlug;
   let commentContent;
-
+  let value;
+  let accessToken = getCookie("access_token");
   onMount(async () => {
+    if (accessToken) {
+      fetchData();
+      user = await fetchUser();
+      userInfo = user.name;
+    }
     fetchData();
-    user = await fetchUser();
-    userInfo = user.name;
   });
 
   const fetchData = async () => {
-    let accessToken = getCookie("access_token");
-
     try {
       const response = await fetch(
         `https://devdox.up.railway.app/api/v1/snippets/snippet/?slug=${dataSlug}`,
@@ -36,19 +42,15 @@
       );
       const responseData = await response.json();
       data = responseData[0];
+      const code = data.code_snippet;
+      value = code.replace(/<\/?(?:pre|code)[^>]*>/g, "");
       fetchComments(); // Fetch comments for the specific snippet
     } catch (error) {
       console.error(error);
     } finally {
-      loading = false;
+      isLoading = false;
     }
   };
-
-  afterUpdate(() => {
-    if (data) {
-      initializePrism();
-    }
-  });
 
   function copySnippet(code, event) {
     // Extract the code snippet without <pre> and <code> tags
@@ -89,13 +91,6 @@
     }, 2000);
   }
 
-  function initializePrism() {
-    const script = document.createElement("script");
-    script.src =
-      "https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js";
-    document.head.appendChild(script);
-  }
-
   // Function to fetch comments for the specific snippet
   async function fetchComments() {
     try {
@@ -111,23 +106,25 @@
 
   // Function to handle comment submission
   async function submitComment(event) {
-
     event.preventDefault();
 
     try {
       let formData = JSON.stringify({
-            snippet: data.id,
-            author: user.id,
-            author_name: userInfo.full_name,
-            author_email: user.email,
-            author_picture: user.profile_picture,
-            content: commentContent,
-          })
+        snippet: data.id,
+        author: user.id,
+        author_name: userInfo.full_name,
+        author_email: user.email,
+        author_picture: user.profile_picture,
+        content: commentContent,
+      });
 
-      postAuthData('https://devdox.up.railway.app/api/v1/snippets/comments/' , formData , "POST")
-      fetchComments()
-      commentContent = ""
-      
+      postAuthData(
+        "https://devdox.up.railway.app/api/v1/snippets/comments/",
+        formData,
+        "POST"
+      );
+      fetchComments();
+      commentContent = "";
     } catch (error) {
       console.error(error);
     }
@@ -136,32 +133,48 @@
 
 <Navbar />
 
-{#if loading}
-  <p>Loading...</p>
-{:else if data && user}
+{#if isLoading}
+  <div class="loader" />
+{:else if data}
   <div class="container card-cont">
     <div class="">
       <h4>{data.title}</h4>
       <div>{@html data.content}</div>
       <main class="code-snippet">
-        {#if data.author == user.id}
-        
-
-          <a href={"/update/" + data.slug}>
-            <button>
-            <i class="fas fa-edit" />
-
+        <div class="snip-btn">
+          {#if user && data.author == user.id}
+            <button class="copy-btn">
+              <a href={"/update/" + data.slug}>
+                <i class="fas fa-trash" />
+              </a>
             </button>
-          </a>
-        {/if}
-        <button
-          class="copy-button"
-          on:click={(event) => copySnippet(data.code_snippet, event)}
-        >
-          <i class="fas fa-copy" />
-        </button>
-
-    {@html data.code_snippet}
+            <button class="copy-btn">
+              <a href={"/update/" + data.slug}>
+                <i class="fas fa-edit" />
+              </a>
+            </button>
+          {/if}
+          <button
+            class="copy-button copy-btn"
+            on:click={(event) => copySnippet(data.code_snippet, event)}
+          >
+            <i class="fas fa-copy" />
+          </button>
+        </div>
+        <div class="editor-container contaner">
+          <CodeMirror
+            bind:value
+            lang={data.language === "javascript" ? javascript() : python()}
+            styles={{
+              "&": {
+                width: "100%",
+                height: "80vh",
+              },
+            }}
+            theme={oneDark}
+            readonly
+          />
+        </div>
       </main>
     </div>
   </div>
@@ -221,7 +234,7 @@
   p {
     font-size: 20px;
   }
-  a{
+  a {
     background-image: #ffffff !important;
   }
   /* Card */
@@ -237,9 +250,14 @@
     font-size: 24px;
     margin-bottom: 10px;
   }
+  .snip-btn {
+    display: flex;
+    justify-content: space-around !important;
+    align-items: center;
+  }
 
   /* Copy button */
-  .copy-button {
+  .copy-btn {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -249,9 +267,16 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-left: auto;
-    margin-right: 0;
+    margin-right: auto;
+    width: 40px;
+    justify-content: center;
   }
-
+  .snip-btn a {
+    color: #ffffff;
+  }
+  a {
+    background-image: none !important;
+  }
   .copy-button i {
     margin-right: 5px;
   }

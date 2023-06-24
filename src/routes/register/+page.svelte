@@ -20,7 +20,7 @@
       formData.append("password", registerPassword);
 
       const response = await fetch(
-        "https://devdox.up.railway.app/api/v1/user",
+        "https://devdox.up.railway.app/api/v1/user/",
         {
           method: "POST",
           body: formData,

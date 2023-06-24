@@ -17,9 +17,9 @@ export async function postAuthData(url, data, type) {
       const responseData = await response
       return responseData;
     } else {
-      // console.error('Failed to upload snippet');
+      console.error('Failed to upload snippet');
     }
   } catch (error) {
-    // console.error('Failed to upload snippet', error);
+    console.error('Failed to upload snippet', error);
   }
 }

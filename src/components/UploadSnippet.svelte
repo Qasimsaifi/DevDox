@@ -45,7 +45,7 @@
   let slug = "";
   let content = "";
   let language = "javascript";
-  let files = []; // Set default value to current date
+  let files = [];
   let isPrivate = 1;
   let author = null;
   let value = `
@@ -101,35 +101,43 @@
   }
 
   async function uploadSnippet() {
-    isLoading = true;
-    try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("slug", slug);
-      formData.append("content", content);
-      formData.append("code_snippet", value);
-      formData.append("language", language);
-      formData.append("image", files[0]);
-      formData.append("is_private", isPrivate);
-      formData.append("author", author);
+  isLoading = true;
+  try {
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("slug", slug);
+    formData.append("content", content);
+    formData.append("code_snippet", value);
+    formData.append("language", language);
+    formData.append("image", files[0]);
+    formData.append("is_private", isPrivate);
+    formData.append("author", author);
 
-      const jsonData = {};
-      for (let [key, value] of formData.entries()) {
-        jsonData[key] = value;
+    const response = await fetch(
+      "https://devdox.up.railway.app/api/v1/snippets/snippet/",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
       }
-      const data = JSON.stringify(jsonData);
+    );
 
-      await postAuthData(
-        "https://devdox.up.railway.app/api/v1/snippets/snippet/",
-        data,
-        "POST"
-      );
+    if (response.ok) {
+      const data = await response.json();
       console.log(data);
-      isLoading = false;
-    } catch (error) {
-      console.error("Failed to upload snippet", error);
+    } else {
+      throw new Error("Failed to upload snippet");
     }
+
+    isLoading = false;
+  } catch (error) {
+    console.error("Failed to upload snippet", error);
   }
+}
+
+
 </script>
 
 <div class="editor">
@@ -141,7 +149,7 @@
       <h1 class="snippet-heading">Upload Snippet</h1>
     </div>
 
-    <form on:submit|preventDefault={uploadSnippet}>
+    <form on:submit|preventDefault={uploadSnippet} enctype="multipart/form-data">
       <label for="title">Title:</label>
       <input type="text" id="title" bind:value={title} required />
 

@@ -86,9 +86,9 @@ h4 {
 }
 
 @media (min-width: 1024px) {
-  .card-container {
+  /* .card-container {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
+  } */
 }
 .card-container{
   margin-top: 70px;
@@ -246,10 +246,15 @@ p.error {
   }
 }
 .card-container {
-  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 20px;
+  width: 90vw;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top: 130px;
+  margin-bottom: 50px;
 }
+
 
 .card {
   background-color: #333;
@@ -301,9 +306,9 @@ h4 {
 }
 
 @media (min-width: 1024px) {
-  .card-container {
+  /* .card-container {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
+  } */
 }
 .snippet-heading {
   font-size: 28px;

@@ -17,10 +17,10 @@ export async function fetchUser() {
       
       return data;
     } else {
-      console.error("Failed to fetch user data");
+      // console.error("Failed to fetch user data");
     }
   } catch (error) {
-    console.error("Failed to fetch user data", error);
+    // console.error("Failed to fetch user data", error);
   } finally {
   }
 }
@@ -41,10 +41,10 @@ export async function fetchPublicUser(user_id) {
       
       return data;
     } else {
-      console.error("Failed to fetch user data");
+      // console.error("Failed to fetch user data");
     }
   } catch (error) {
-    console.error("Failed to fetch user data", error);
+    // console.error("Failed to fetch user data", error);
   } finally {
   }
 }
@@ -67,9 +67,9 @@ export async function fetchSnippets(user_id) {
       return snippetsCount
       
     } else {
-      console.error("Failed to fetch snippets");
+      // console.error("Failed to fetch snippets");
     }
   } catch (error) {
-    console.error("Failed to fetch snippets", error);
+    // console.error("Failed to fetch snippets", error);
   }
 }

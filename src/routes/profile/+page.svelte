@@ -31,6 +31,7 @@
       goto("/login");
     } else {
       user = await getUser();
+      
       userName = await user.name;
       snippetsCount = await getSnippets(user.id)
       isLoading = false;

@@ -56,6 +56,7 @@
   let value;
   let editorLanguage = javascript();
  let  snipId;
+ let snipData;
   onMount(async () => {
     accessToken = getCookie("access_token");
     code = "// Start coding here...";
@@ -92,7 +93,7 @@
         }
       );
       const responseData = await response.json();
-      const snipData = responseData[0];
+      snipData = responseData[0];
       let code = snipData.code_snippet;
       title = snipData.title;
       slug = snipData.slug;
@@ -119,6 +120,16 @@
     }
   };
 
+  let imageFile;
+
+  // ...existing code...
+
+  const handleImageChange = (event) => {
+  imageFile = event.target.files[0];
+};
+
+
+
   async function uploadSnippet() {
     let accessToken = getCookie("access_token");
   try {
@@ -128,10 +139,8 @@
     formData.append("content", content);
     formData.append("code_snippet", value);
     formData.append("language", language);
-    formData.append("image", files[0]);
     formData.append("is_private", isPrivate);
     formData.append("author", author);
-
     const jsonData = {};
     for (let [key, value] of formData.entries()) {
       jsonData[key] = value;
@@ -166,12 +175,12 @@
   <!-- <button on:click={checkEditorvalue}>hiii</button> -->
   {#if isLoading}
     <div class="loader" />
-  {:else if user}
+  {:else if user && snipData}
     <div class="snippet-cont upload-heading">
       <h1 class="snippet-heading">Upload Snippet</h1>
     </div>
 
-    <form>
+    <div class="form">
       <label for="title">Title:</label>
       <input type="text" id="title" bind:value={title} required />
 
@@ -199,8 +208,10 @@
           theme={oneDark}
         />
       </div>
-      <label for="image">Image:</label>
-      <input type="file" id="image" bind:files />
+      <!-- <label for="image">Image:</label> -->
+      <!-- <label for="image">Image:</label>
+      <input type="file" id="image" bind:files /> -->
+
       <label for="isPrivate">Is Private:</label>
       <select id="isPrivate" bind:value={isPrivate}>
         <option value="0">Public</option>
@@ -215,10 +226,10 @@
       <label for="author">Author:</label>
       <input type="text" id="author" value={user.name.full_name} readonly />
 
-      <button on:click={uploadSnippet} type="submit">Upload</button>
-    </form>
+      <button on:click={uploadSnippet} type="submit">Update</button>
+    </div>
   {:else}
-    <p class="error">Failed to fetch user data.</p>
+  <div class="loader" />
   {/if}
 </div>
 
@@ -258,7 +269,7 @@
     margin-top: 70px;
   }
 
-  form {
+  .form {
     display: grid;
     grid-gap: 10px;
     max-width: 90vw;
@@ -291,9 +302,4 @@
     background-color: #555;
   }
 
-  p.error {
-    text-align: center;
-    margin-top: 20px;
-    color: #f00;
-  }
 </style>
