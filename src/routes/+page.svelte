@@ -20,7 +20,7 @@
 
       // Make the GET request to the API endpoint
       const response = await fetch(
-        `https://devdox.up.railway.app/api/v1/snippets/snippet/`,
+        `https://devdox.up.railway.app/api/v1/snippets/snippet/?ordering=-created_at`,
         {
           method: "GET",
           headers: accessToken
@@ -69,7 +69,7 @@
                   styles={{
                     "&": {
                       width: "400px",
-                      height: "80vh",
+                      height: "400px",
                     },
                   }}
                   theme={oneDark}

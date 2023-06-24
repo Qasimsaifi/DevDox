@@ -9,7 +9,7 @@
   import { javascript } from "@codemirror/lang-javascript";
   import { python } from "@codemirror/lang-python";
   import { oneDark } from "@codemirror/theme-one-dark";
-  import Editor from '@tinymce/tinymce-svelte'
+  import Editor from "@tinymce/tinymce-svelte";
   let user = {};
   let isLoading = true;
   let code;
@@ -56,6 +56,7 @@
     
     helloWorld();
   `;
+  let fieldsEmpty;
   let editorLanguage = javascript();
   let buttonValue = "Javascript";
 
@@ -101,43 +102,58 @@
   }
 
   async function uploadSnippet() {
-  isLoading = true;
-  try {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("slug", slug);
-    formData.append("content", content);
-    formData.append("code_snippet", value);
-    formData.append("language", language);
-    formData.append("image", files[0]);
-    formData.append("is_private", isPrivate);
-    formData.append("author", author);
+    isLoading = true;
 
-    const response = await fetch(
-      "https://devdox.up.railway.app/api/v1/snippets/snippet/",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: formData,
-      }
-    );
+    // Validation check for required fields
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-    } else {
-      throw new Error("Failed to upload snippet");
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("slug", slug);
+      formData.append("content", content);
+      formData.append("code_snippet", value);
+      formData.append("language", language);
+      formData.append("image", files[0]);
+      formData.append("is_private", isPrivate);
+      formData.append("author", author);
+
+      const response = await fetch(
+        "https://devdox.up.railway.app/api/v1/snippets/snippet/",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        isLoading = false;
+        title = "";
+        slug = "";
+        content = "";
+        language = "javascript";
+        files = [];
+        isPrivate = 1;
+        author = null;
+        value = `
+    // This is the starter code
+    function helloWorld() {
+      console.log("Hello, World!");
     }
-
-    isLoading = false;
-  } catch (error) {
-    console.error("Failed to upload snippet", error);
+    
+    helloWorld();
+  `;
+      } else {
+        throw new Error("Failed to upload snippet");
+      }
+    } catch (error) {
+      console.error("Failed to upload snippet", error);
+    }
   }
-}
-
-
 </script>
 
 <div class="editor">
@@ -149,7 +165,10 @@
       <h1 class="snippet-heading">Upload Snippet</h1>
     </div>
 
-    <form on:submit|preventDefault={uploadSnippet} enctype="multipart/form-data">
+    <form
+      on:submit|preventDefault={uploadSnippet}
+      enctype="multipart/form-data"
+    >
       <label for="title">Title:</label>
       <input type="text" id="title" bind:value={title} required />
 
@@ -158,39 +177,48 @@
 
       <label for="content">Content:</label>
       <!-- <textarea id="content" bind:value={content} required /> -->
-      <Editor id="statement" {apiKey} {conf} bind:value={content} />
+      <Editor id="statement" {apiKey} {conf} bind:value={content} required />
 
       <label for="codeSnippet">Code Snippet:</label>
       <div class="editor-container">
-        <button on:click={changeEditorLanguage}>Editor Language is {buttonValue} click to change</button>
+        <button on:click={changeEditorLanguage}
+          >Editor Language is {buttonValue} click to change</button
+        >
 
         <CodeMirror
-  bind:value
-  lang={editorLanguage}
-  styles={{
-    "&": {
-      width: "100%",
-      height: "80vh",
-    },
-  }}
-  theme={oneDark}
-/>
+          bind:value
+          lang={editorLanguage}
+          styles={{
+            "&": {
+              width: "100%",
+              height: "80vh",
+            },
+          }}
+          theme={oneDark}
+          required
+        />
       </div>
       <label for="image">Image:</label>
       <input type="file" id="image" bind:files />
       <label for="isPrivate">Is Private:</label>
-      <select id="isPrivate" bind:value={isPrivate}>
-        <option value=0>Public</option>
-        <option value=1>Private</option>
+      <select id="isPrivate" bind:value={isPrivate} required>
+        <option value="0">Public</option>
+        <option value="1">Private</option>
       </select>
       <label for="language">Snippet Language:</label>
-      <select id="language" bind:value={language}>
+      <select id="language" bind:value={language} required>
         <option value="python">Python</option>
         <option value="javascript">Javascript</option>
       </select>
 
       <label for="author">Author:</label>
-      <input type="text" id="author" value={user.name.full_name} readonly />
+      <input
+        type="text"
+        id="author"
+        value={user.name.full_name}
+        readonly
+        required
+      />
 
       <button type="submit">Upload</button>
     </form>
@@ -201,11 +229,10 @@
 
 <!-- Styling for the main content section -->
 <style>
-  
   .editor {
     margin-top: 100px;
   }
-  .editor-container{
+  .editor-container {
     font-size: 16px;
   }
   .loader {
@@ -214,7 +241,6 @@
     align-items: center;
     height: 600px;
   }
-
 
   .loader::after {
     content: "";
