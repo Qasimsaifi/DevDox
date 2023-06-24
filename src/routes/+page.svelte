@@ -59,7 +59,7 @@
         <a href={"/snippet/" + snippet.slug}>
           <div class="card">
             <h4>{snippet.title}</h4>
-            <div class="card-content">
+            <div class="card-content editor-container">
               {#if snippet.language == "javascript"}
                 <CodeMirror
                   bind:value={snippet.code_snippet}

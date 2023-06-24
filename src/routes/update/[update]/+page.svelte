@@ -131,8 +131,10 @@
 
 
   async function uploadSnippet() {
+
     let accessToken = getCookie("access_token");
   try {
+    isLoading = true;
     const formData = new FormData();
     formData.append("title", title);
     formData.append("slug", slug);
@@ -165,6 +167,7 @@
   } catch (error) {
     console.error('Failed to update snippet', error);
   } finally {
+    isLoading = false
   }
 }
 
