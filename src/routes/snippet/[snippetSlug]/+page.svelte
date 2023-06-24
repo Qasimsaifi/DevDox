@@ -51,6 +51,47 @@
       isLoading = false;
     }
   };
+  async function deleteSnippet(snippetId) {
+  const firstConfirmation = confirm("Are you sure you want to delete this snippet? This action cannot be undone.");
+  if (!firstConfirmation) {
+    return;
+  }
+  
+  const secondConfirmation = confirm("This action is irreversible. Please confirm once again that you want to delete this snippet.");
+  if (!secondConfirmation) {
+    return;
+  }
+  
+  isLoading = true;
+  
+  try {
+    const response = await fetch(
+      `https://devdox.up.railway.app/api/v1/snippets/snippet/${snippetId}/`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (response.status === 204) {
+      // Snippet deleted successfully
+      goto('/');
+    } else if (response.ok) {
+      const data = await response.json();
+    } else {
+      throw new Error("Failed to delete snippet");
+    }
+
+    isLoading = false;
+  } catch (error) {
+    console.error("Failed to delete snippet", error);
+  }
+}
+
+
+
 
   function copySnippet(code, event) {
     // Extract the code snippet without <pre> and <code> tags
@@ -143,10 +184,8 @@
       <main class="code-snippet">
         <div class="snip-btn">
           {#if user && data.author == user.id}
-            <button class="copy-btn">
-              <a href={"/update/" + data.slug}>
+            <button on:click={deleteSnippet(data.id)} class="copy-btn">           
                 <i class="fas fa-trash" />
-              </a>
             </button>
             <button class="copy-btn">
               <a href={"/update/" + data.slug}>

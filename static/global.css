@@ -350,7 +350,7 @@ a {
 
 /* Copy button */
 .copy-btn {
-  background-color: #007bff;
+  background-color: transparent;
   color: #fff;
   border: none;
   border-radius: 5px;
