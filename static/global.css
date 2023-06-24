@@ -322,3 +322,141 @@ h4 {
   margin-bottom: 40px;
   text-transform: uppercase;
 }
+ /* Loading message */
+ p {
+  font-size: 20px;
+}
+a {
+  background-image: #ffffff !important;
+}
+/* Card */
+.card-cont {
+  border-radius: 10px;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+  /* color: #fff; */
+  margin-top: 120px;
+}
+
+/* Card title */
+.card-cont h4 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+.snip-btn {
+  display: flex;
+  justify-content: space-around !important;
+  align-items: center;
+}
+
+/* Copy button */
+.copy-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40px;
+  justify-content: center;
+}
+.snip-btn a {
+  color: #ffffff;
+}
+a {
+  background-image: none !important;
+}
+.copy-button i {
+  margin-right: 5px;
+}
+
+/* Code snippet */
+.code-snippet {
+  background-color: #272b33;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.comments-section {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.comment {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.comment-avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.comment-content {
+  flex-grow: 1;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+}
+
+.comment-author {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: #888;
+}
+
+.comment-text {
+  margin-top: 5px;
+}
+
+.comment-form {
+  margin-top: 20px;
+}
+
+.comment-form .input-with-button {
+  position: relative;
+  border: 2px solid #6e6f74;
+  border-radius: 5px;
+}
+
+.comment-form input[type="text"] {
+  background: transparent;
+  border: none;
+  height: 100%;
+  outline: none;
+  display: inline-block;
+  width: 87%;
+}
+
+.comment-form .icon {
+  color: #464646;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .comment-form input[type="text"] {
+    width: 70%;
+  }
+}
+
+.attractive-heading {
+  margin-bottom: 20px;
+}
