@@ -15,6 +15,7 @@
   const dataSlug = $page.params.update;
   let user = {};
   let isLoading = true;
+  let isUpdating = false;
   let code;
 
   let apiKey = "57uq22dj8wgzh3n9989668cmek929nyrzj4dq0rs40funcv6";
@@ -134,7 +135,7 @@
 
     let accessToken = getCookie("access_token");
   try {
-    isLoading = true;
+    isUpdating = true;
     const formData = new FormData();
     formData.append("title", title);
     formData.append("slug", slug);
@@ -143,31 +144,26 @@
     formData.append("language", language);
     formData.append("is_private", isPrivate);
     formData.append("author", author);
-    const jsonData = {};
-    for (let [key, value] of formData.entries()) {
-      jsonData[key] = value;
-    }
-    const data = JSON.stringify(jsonData);
+    formData.append("image", files[0]);
+
 
     const response = await fetch(`https://devdox.up.railway.app/api/v1/snippets/snippet/${snipId}/`, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json',
-        // Add your authentication headers here
         'Authorization': `Bearer ${accessToken}`,
       },
-      body: data,
+      body: formData,
     });
 
     if (response.ok) {
-      console.log('Snippet updated successfully!');
+      // console.log('Snippet updated successfully!');
     } else {
       console.error('Error:', response.status);
     }
   } catch (error) {
     console.error('Failed to update snippet', error);
   } finally {
-    isLoading = false
+    isUpdating = false
   }
 }
 
@@ -183,7 +179,8 @@
       <h1 class="snippet-heading">Upload Snippet</h1>
     </div>
 
-    <div class="form">
+    <form class="form" on:submit|preventDefault={uploadSnippet}
+    enctype="multipart/form-data">
       <label for="title">Title:</label>
       <input type="text" id="title" bind:value={title} required />
 
@@ -196,7 +193,7 @@
 
       <label for="codeSnippet">Code Snippet:</label>
       <div class="editor-container">
-        <button on:click={changeEditorLanguage}
+        <button  on:click|preventDefault={changeEditorLanguage}
         >Editor Language is {buttonValue} click to change</button
       >
         <CodeMirror
@@ -211,9 +208,8 @@
           theme={oneDark}
         />
       </div>
-      <!-- <label for="image">Image:</label> -->
-      <!-- <label for="image">Image:</label>
-      <input type="file" id="image" bind:files /> -->
+      <label for="image">Image:</label>
+      <input type="file" id="image" bind:files />
 
       <label for="isPrivate">Is Private:</label>
       <select id="isPrivate" bind:value={isPrivate}>
@@ -229,8 +225,8 @@
       <label for="author">Author:</label>
       <input type="text" id="author" value={user.name.full_name} readonly />
 
-      <button on:click={uploadSnippet} type="submit">Update</button>
-    </div>
+      <button on:click|preventDefault={uploadSnippet} type="submit">{isUpdating ? "Updating...." : "Update"}</button>
+    </form>
   {:else}
   <div class="loader" />
   {/if}

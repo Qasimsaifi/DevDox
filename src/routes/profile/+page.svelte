@@ -48,7 +48,7 @@
   {#if isLoading}
     <div class="loader" />
   {:else if user}
-    <div class="profile">
+    <div class="profile ">
       <img
         class="profile-picture"
         src={user.profile_picture}
