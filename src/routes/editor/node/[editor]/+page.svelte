@@ -4,38 +4,10 @@
   import CodeMirror from "svelte-codemirror-editor";
   import { python } from "@codemirror/lang-python";
   import { oneDark } from "@codemirror/theme-one-dark";
-  import { getCookie } from '../../../../utils/cookies';
-  import { page } from "$app/stores";
-  import Navbar from '../../../../components/Navbar.svelte';
+  import { runInNewContext } from 'vm';
 
-  let accessToken = getCookie("access_token");
-  const codeValue = $page.params.editor;
-
-  onMount(async () => {
-    fetchData();
-  });
-
-  let code;
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        `https://devdox.up.railway.app/api/v1/snippets/snippet/?slug=${codeValue}`,
-        {
-          method: "GET",
-          headers: accessToken
-            ? { Authorization: `Bearer ${accessToken}` }
-            : {},
-        }
-      );
-      const responseData = await response.json();
-      let data = responseData[0];
-      code = data.code_snippet.replace(/<\/?(?:pre|code)[^>]*>/g, "");
-      // Fetch comments for the specific snippet
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  let code = `let x = 10;
+    console.log(x);`;
 
   let output = '';
 
@@ -45,28 +17,25 @@
   async function executeCode() {
     outputStore.set('');
 
-    const response = await fetch('http://127.0.0.1:8000/execute/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        code,
-        language: 'node',
-      }),
-    });
-
-    const data = await response.json();
-    output = data.output;
-    console.log(data)
+    try {
+      const sandbox = { console: console };
+      runInNewContext(code, sandbox);
+      output = sandbox.console.output.join('\n');
+    } catch (error) {
+      output = error.message;
+    }
 
     // Update the output store
     outputStore.set(output);
   }
 
+  let console = {
+    output: [],
+    log: function (message) {
+      this.output.push(message);
+    }
+  };
 </script>
-
-<Navbar/>
 
 <div class="containers">
   <div class="editor">
@@ -85,7 +54,7 @@
   <div class="terminal">
     <button class="copy-btn" on:click={executeCode}>Run</button>
     <div class="output">
-      <p>src/main.py</p>
+      <p>Output:</p>
       <pre>{$outputStore}</pre>
     </div>
   </div>
