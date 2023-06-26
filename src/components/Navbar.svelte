@@ -42,6 +42,9 @@
         <li>
           <a href="/">Contact</a>
         </li>
+        <li>
+          <a href="/editor">Editor</a>
+        </li>
         {#if isLoggedIn}
           <li>
             <a href="/uploadsnippet">Upload Snippet</a>

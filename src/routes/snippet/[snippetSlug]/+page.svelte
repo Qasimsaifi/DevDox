@@ -192,7 +192,13 @@
                 <i class="fas fa-edit" />
               </a>
             </button>
-          {/if}
+            {/if}
+            <button class="copy-btn">
+              <a href={"/editor/" + data.slug}>
+                <i class="fas fa-play" />
+              </a>
+            </button>
+          
           <button
             class="copy-button copy-btn"
             on:click={(event) => copySnippet(data.code_snippet, event)}

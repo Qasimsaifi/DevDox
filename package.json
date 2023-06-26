@@ -20,9 +20,16 @@
 		"@sveltejs/adapter-vercel": "^3.0.1",
 		"@sveltejs/kit": "^1.20.5",
 		"@tinymce/tinymce-svelte": "^1.0.1",
+		"@uiw/codemirror-theme-dracula": "^4.21.7",
+		"blessed": "^0.1.81",
 		"codemirror": "^6.0.1",
 		"monaco-editor": "^0.39.0",
+		"safe-buffer": "^5.2.1",
 		"svelte": "^4.0.0",
-		"svelte-codemirror-editor": "^1.1.0"
+		"svelte-codemirror-editor": "^1.1.0",
+		"terminal.js": "^1.0.11",
+		"wcwidth": "^1.0.1",
+		"xterm": "^5.2.1",
+		"xterm-addon-fit": "^0.7.0"
 	}
 }

@@ -60,7 +60,6 @@
           <div class="card">
             <h4>{snippet.title}</h4>
             <div class="card-content editor-container">
-              {#if snippet.language == "javascript"}
                 <CodeMirror
                   bind:value={snippet.code_snippet}
                   lang={snippet.language === "javascript"
@@ -75,7 +74,6 @@
                   theme={oneDark}
                   readonly
                 />
-              {/if}
             </div>
           </div>
         </a>
