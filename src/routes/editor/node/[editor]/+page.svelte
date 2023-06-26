@@ -4,9 +4,9 @@
   import CodeMirror from "svelte-codemirror-editor";
   import { python } from "@codemirror/lang-python";
   import { oneDark } from "@codemirror/theme-one-dark";
-  import { getCookie } from '../../../utils/cookies';
+  import { getCookie } from '../../../../utils/cookies';
   import { page } from "$app/stores";
-  import Navbar from '../../../components/Navbar.svelte';
+  import Navbar from '../../../../components/Navbar.svelte';
 
   let accessToken = getCookie("access_token");
   const codeValue = $page.params.editor;
@@ -43,49 +43,27 @@
   const outputStore = writable('');
 
   async function executeCode() {
-    const inputRegex = /input\(\)/g;
-    const inputMatches = code.match(inputRegex) || [];
-    const inputCount = inputMatches.length;
-
-    let inputValues = '';
-
-    for (let i = 0; i < inputCount; i++) {
-      const userInput = prompt(`Enter input ${i + 1}:`);
-      if (userInput === null) {
-        // Exit execution if the user cancels the input prompt
-        return;
-      }
-      inputValues += userInput + '\n';
-    }
-
     outputStore.set('');
 
-    const response = await fetch('https://code-runner.up.railway.app/execute/', {
+    const response = await fetch('http://127.0.0.1:8000/execute/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         code,
-        language: 'python',
-        input: inputValues,
+        language: 'node',
       }),
     });
 
     const data = await response.json();
     output = data.output;
+    console.log(data)
 
     // Update the output store
     outputStore.set(output);
   }
 
-  // // Shortcut key handler
-  // function handleShortcut(event) {
-  //   if (event.ctrlKey && event.shiftKey && event.key === 'Enter') {
-  //     executeCode();
-  //   }
-  // }
-  // document.addEventListener('keydown', handleShortcut);
 </script>
 
 <Navbar/>
