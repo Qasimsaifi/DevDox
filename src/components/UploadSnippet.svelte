@@ -10,9 +10,11 @@
   import { python } from "@codemirror/lang-python";
   import { oneDark } from "@codemirror/theme-one-dark";
   import Editor from "@tinymce/tinymce-svelte";
-  let user = {};
-  let isLoading = true;
+  let user;
+  let isUserLoded = false
+  let isLoading = false;
   let code;
+  let userInfo;
 
   let apiKey = "57uq22dj8wgzh3n9989668cmek929nyrzj4dq0rs40funcv6";
   let conf = {
@@ -93,9 +95,11 @@
 
   async function getUser() {
     try {
+
       user = await fetchUser();
       author = user.id;
-      isLoading = false;
+      userInfo = user.name
+      isUserLoded = true;
     } catch (error) {
       console.error("Failed to fetch user data.", error);
     }
@@ -155,12 +159,11 @@
     }
   }
 </script>
-
+{#if user}
+  
 <div class="editor">
   <!-- <button on:click={checkEditorvalue}>hiii</button> -->
-  {#if isLoading}
-    <div class="loader" />
-  {:else if user}
+  
     <div class="snippet-cont upload-heading">
       <h1 class="snippet-heading">Upload Snippet</h1>
     </div>
@@ -181,7 +184,7 @@
 
       <label for="codeSnippet">Code Snippet:</label>
       <div class="editor-container">
-        <button on:click={changeEditorLanguage}
+        <button on:click|preventDefault={changeEditorLanguage}
           >Editor Language is {buttonValue} click to change</button
         >
 
@@ -195,13 +198,16 @@
             },
           }}
           theme={oneDark}
-          required
+          requried
         />
       </div>
       <label for="image">Image:</label>
       <input type="file" id="image" bind:files />
       <label for="isPrivate">Is Private:</label>
+      <label for="author">Author:</label>
+      <input type="text" id="author" value={userInfo.full_name} required readonly/>
       <select id="isPrivate" bind:value={isPrivate} required>
+
         <option value="0">Public</option>
         <option value="1">Private</option>
       </select>
@@ -210,23 +216,19 @@
         <option value="python">Python</option>
         <option value="javascript">Javascript</option>
       </select>
-
-      <label for="author">Author:</label>
-      <input
-        type="text"
-        id="author"
-        value={user.name.full_name}
-        readonly
-        required
-      />
-
-      <button type="submit">Upload</button>
+      <button type="submit">
+        {#if isLoading}
+        <div class="btn-loader"></div>
+        {:else}
+        Upload
+        {/if}  
+      </button>
     </form>
+    
+  </div>
   {:else}
-    <p class="error">Failed to fetch user data.</p>
+  <p class="error">unable to fetch user </p>
   {/if}
-</div>
-
 <!-- Styling for the main content section -->
 <style>
   .editor {
@@ -235,14 +237,13 @@
   .editor-container {
     font-size: 16px;
   }
-  .loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 600px;
-  }
+  .btn-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .loader::after {
+  .btn-loader::after {
     content: "";
     display: inline-block;
     width: 30px;
@@ -296,9 +297,5 @@
     background-color: #555;
   }
 
-  p.error {
-    text-align: center;
-    margin-top: 20px;
-    color: #f00;
-  }
+
 </style>

@@ -193,11 +193,14 @@
               </a>
             </button>
             {/if}
+            {#if data.language == "python"}
+              
             <button class="copy-btn">
               <a href={"/editor/" + data.slug}>
                 <i class="fas fa-play" />
               </a>
             </button>
+            {/if}
           
           <button
             class="copy-button copy-btn"

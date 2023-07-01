@@ -1,27 +1,26 @@
 <script>
   import { page } from "$app/stores";
-    import Navbar from "../../../components/Navbar.svelte";
-    import { onMount } from "svelte";
-    import { getCookie } from "../../../utils/cookies";
-    import { goto } from "$app/navigation";
-    let user;
-    let userName;
-    let isLoading=true;
-    let myUser;
-    async function getUser() {
+  import Navbar from "../../../components/Navbar.svelte";
+  import { onMount } from "svelte";
+  import { getCookie } from "../../../utils/cookies";
+  import { goto } from "$app/navigation";
+  let user;
+  let userName;
+  let isLoading = true;
+  let myUser;
+  async function getUser() {
     const user = await fetchUser();
     return user;
-    
   }
 
-    import { fetchPublicUser , fetchUser} from "../../../utils/fetchData";
-    async function getPublicUser() {
-      const user_id = $page.params.public;
+  import { fetchPublicUser, fetchUser } from "../../../utils/fetchData";
+  async function getPublicUser() {
+    const user_id = $page.params.public;
     try {
       user = await fetchPublicUser(user_id);
       userName = user.name;
     } catch (error) {
-      console.error('Failed to fetch user data.', error);
+      console.error("Failed to fetch user data.", error);
     }
   }
 
@@ -31,41 +30,34 @@
     if (!accessToken) {
       goto("/login");
     } else {
-
       isLoading = false;
-        
-      getPublicUser()
+
+      getPublicUser();
       myUser = await getUser();
-if(user && myUser){
-
-  if(user.id === myUser.id){
-    goto("/profile");
-
-  }
-}
-      
+      if (user && myUser) {
+        if (user.id == myUser.id) {
+          goto("/profile");
+        }
+      }
     }
   });
-
-
-
 </script>
-<Navbar/>
+
+<Navbar />
 <main>
   {#if user}
-<div class="profile">
-  <img
-    class="profile-picture"
-    src={`https://res.cloudinary.com/dehpkgdw5/${user.profile_picture}`}
-    alt=""
-    role="presentation"
-  />
-  <div class="user-details">
-    <h2>{user.first_name} {user.last_name}</h2>
-    
-  </div>
-</div>
+    <div class="profile">
+      <img
+        class="profile-picture"
+        src={`https://res.cloudinary.com/dehpkgdw5/${user.profile_picture}`}
+        alt=""
+        role="presentation"
+      />
+      <div class="user-details">
+        <h2>{user.first_name} {user.last_name}</h2>
+      </div>
+    </div>
   {:else}
-  <div class="loader" />
-{/if}
+    <div class="loader" />
+  {/if}
 </main>

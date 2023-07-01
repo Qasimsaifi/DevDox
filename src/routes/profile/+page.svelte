@@ -61,7 +61,10 @@
         <p class="mobile">Mobile: {user.mobile}</p>
         <div class="problem-stats">
           <div class="problem-stat">
-            <h2>{snippetsCount.length}</h2>
+            <a href="/mysnippets">
+            
+              <h2>{snippetsCount.length}</h2>
+            </a>
             <p>Your Snippets</p>
           </div>
           <div class="problem-stat">
