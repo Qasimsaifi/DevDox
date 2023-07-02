@@ -7,6 +7,7 @@
   import { javascript } from "@codemirror/lang-javascript";
   import { python } from "@codemirror/lang-python";
   import { oneDark } from "@codemirror/theme-one-dark";
+    import Footer from "../components/Footer.svelte";
   let snippets;
   let isLoading = true;
   let value;
@@ -84,3 +85,4 @@
     <p>No snippets found.</p>
   {/if}
 </div>
+<Footer/>

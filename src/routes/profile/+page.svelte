@@ -6,6 +6,7 @@
   import Navbar from "../../components/Navbar.svelte";
   import MySnippets from "../../components/MYSnippets.svelte";
   import { fetchUser , fetchSnippets } from "../../utils/fetchData.js";
+    import Footer from "../../components/Footer.svelte";
   let user = {};
   let userName = {};
   let isLoading = true;
@@ -80,5 +81,4 @@
   {/if}
 </main>
 <MySnippets />
-
 

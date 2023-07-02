@@ -7,6 +7,7 @@
   import { getCookie } from '../../../utils/cookies';
   import { page } from "$app/stores";
   import Navbar from '../../../components/Navbar.svelte';
+    import Footer from '../../../components/Footer.svelte';
 
   let accessToken = getCookie("access_token");
   const codeValue = $page.params.editor;
@@ -112,6 +113,7 @@
     </div>
   </div>
 </div>
+<Footer/>
 
 <style>
 .containers {

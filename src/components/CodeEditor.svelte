@@ -65,6 +65,7 @@
     width: 90vw;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 70px;
   }
 
   .editor {
@@ -111,9 +112,10 @@
     width: 60px;
   }
 </style>
+<div class="editor-cont">
 
-<div class="containers">
-  <div class="editor">
+  <div class="containers">
+    <div class="editor">
     <CodeMirror
       bind:value={code}
       lang={python()}
@@ -124,7 +126,7 @@
         },
       }}
       theme={oneDark}
-    />
+      />
   </div>
   <div class="terminal">
 
@@ -136,3 +138,5 @@
   </div>
 </div>
 
+
+    </div>

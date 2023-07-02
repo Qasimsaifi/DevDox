@@ -10,6 +10,7 @@
   import { javascript } from "@codemirror/lang-javascript";
   import { python } from "@codemirror/lang-python";
   import { oneDark } from "@codemirror/theme-one-dark";
+    import Footer from "../../../components/Footer.svelte";
 
   let isLoading = true;
   let data = null;
@@ -29,6 +30,37 @@
     fetchData();
   });
 
+  function timeSince(timestamp) {
+    const date = new Date(timestamp);
+    const seconds = Math.floor((Date.now() - date) / 1000);
+
+    let interval = Math.floor(seconds / 31536000);
+    if (interval >= 1) {
+      return `${interval} year${interval !== 1 ? 's' : ''} ago`;
+    }
+
+    interval = Math.floor(seconds / 2592000);
+    if (interval >= 1) {
+      return `${interval} month${interval !== 1 ? 's' : ''} ago`;
+    }
+
+    interval = Math.floor(seconds / 86400);
+    if (interval >= 1) {
+      return `${interval} day${interval !== 1 ? 's' : ''} ago`;
+    }
+
+    interval = Math.floor(seconds / 3600);
+    if (interval >= 1) {
+      return `${interval} hour${interval !== 1 ? 's' : ''} ago`;
+    }
+
+    interval = Math.floor(seconds / 60);
+    if (interval >= 1) {
+      return `${interval} minute${interval !== 1 ? 's' : ''} ago`;
+    }
+
+    return `${Math.floor(seconds)} second${seconds !== 1 ? 's' : ''} ago`;
+  }
   const fetchData = async () => {
     try {
       const response = await fetch(
@@ -241,7 +273,7 @@
             <a href={`/profile/${comment.author}`}>
               <div class="comment-author">{comment.author_name}</div>
             </a>
-            <div class="comment-date">{comment.created_at}</div>
+            <div class="comment-date">{timeSince(comment.created_at)}</div>
           </div>
           <div class="comment-text">
             <p>{comment.content}</p>
@@ -277,3 +309,9 @@
   <p>Not found</p>
 {/if}
 
+<Footer/>
+<style>
+  form{
+    margin-bottom: 70px;
+  }
+</style>

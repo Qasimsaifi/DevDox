@@ -10,6 +10,7 @@
   import { python } from "@codemirror/lang-python";
   import { oneDark } from "@codemirror/theme-one-dark";
   import Editor from "@tinymce/tinymce-svelte";
+    import Navbar from "./Navbar.svelte";
   let user;
   let isUserLoded = false
   let isLoading = false;
@@ -230,6 +231,7 @@
   <p class="error">unable to fetch user </p>
   {/if}
 <!-- Styling for the main content section -->
+
 <style>
   .editor {
     margin-top: 100px;
@@ -269,6 +271,7 @@
     grid-gap: 10px;
     max-width: 90vw;
     margin: 0 auto;
+    margin-bottom: 80px;
   }
 
   label {

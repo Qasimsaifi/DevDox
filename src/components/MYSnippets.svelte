@@ -7,6 +7,8 @@
   import { javascript } from "@codemirror/lang-javascript";
   import { python } from "@codemirror/lang-python";
   import { oneDark } from "@codemirror/theme-one-dark";
+    import Navbar from "./Navbar.svelte";
+    import Footer from "./Footer.svelte";
   let user = {};
   let snippets = [];
   let userName = {};
@@ -117,3 +119,5 @@
     <p class="error">Failed to fetch user data.</p>
   {/if}
 </div>
+
+<Footer/>
