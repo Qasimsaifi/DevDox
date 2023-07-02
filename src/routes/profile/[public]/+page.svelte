@@ -5,7 +5,6 @@
   import { getCookie } from "../../../utils/cookies";
   import { goto } from "$app/navigation";
   let user;
-  let userName;
   let isLoading = true;
   let myUser;
   async function getUser() {
@@ -18,7 +17,6 @@
     const user_id = $page.params.public;
     try {
       user = await fetchPublicUser(user_id);
-      userName = user.name;
     } catch (error) {
       console.error("Failed to fetch user data.", error);
     }
