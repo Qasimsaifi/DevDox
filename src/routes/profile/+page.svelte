@@ -57,8 +57,8 @@
         role="presentation"
       />
       <div class="user-details">
-        <h2>{userName.full_name}</h2>
-        <p class="username">{user.email}</p>
+        <h2>{userName.full_name} <a href="profile/update"><i class="fas fa-edit" /></a> </h2>
+        <p class="username">{user.username}</p>
         <p class="mobile">Mobile: {user.mobile}</p>
         <div class="problem-stats">
           <div class="problem-stat">
@@ -82,3 +82,8 @@
 </main>
 <MySnippets />
 
+<style>
+  i{
+    font-size: 16px;
+  }
+</style>
