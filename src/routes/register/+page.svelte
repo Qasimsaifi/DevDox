@@ -55,6 +55,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>DevDox - Register</title>
+  <meta name="description" content="Create a new account on DevDox and start saving your code snippets." />
+</svelte:head>
 
 <Navbar />
 <main class="container border main-cont">

@@ -58,6 +58,10 @@
   // Check if the user is already logged in on page load
   checkLoggedIn();
 </script>
+<svelte:head>
+  <title>DevDox - Login</title>
+  <meta name="description" content="Login to your DevDox account and access your saved code snippets." />
+</svelte:head>
 
 <Navbar {isLoggedIn} />
 

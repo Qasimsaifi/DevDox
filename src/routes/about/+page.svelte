@@ -11,6 +11,11 @@
   import Navbar from "../../components/Navbar.svelte";
 
 </script>
+<svelte:head>
+  <title>DevDox - About</title>
+  <meta name="description" content="Learn more about DevDox and how it can help you organize and run your code snippets." />
+</svelte:head>
+
 <Navbar/>
 
 <main class="main-container">

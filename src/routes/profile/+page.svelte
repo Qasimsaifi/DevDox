@@ -43,6 +43,10 @@
 
 
 </script>
+<svelte:head>
+  <title>DevDox - Profile</title>
+  <meta name="description" content="View and update your DevDox profile information." />
+</svelte:head>
 
 <Navbar />
 <main>

@@ -203,7 +203,14 @@
     }
   }
 </script>
-
+<title>DevDox - Snippet | Code Snippet Repository</title>
+    <meta name="description" content="Explore a collection of user and public code snippets on DevDox. Find inspiration and save snippets for your projects." />
+    <meta property="og:title" content="DevDox - Snippets | Code Snippet Repository" />
+    <meta property="og:description" content="Explore a collection of user and public code snippets on DevDox. Find inspiration and save snippets for your projects." />
+    <meta property="og:image" content="https://devdox.kasimsaifi.tech/images/devdox-snippets.png" />
+    <meta property="twitter:title" content="DevDox - Snippets | Code Snippet Repository" />
+    <meta property="twitter:description" content="Explore a collection of user and public code snippets on DevDox. Find inspiration and save snippets for your projects." />
+    <meta property="twitter:image" content="https://devdox.kasimsaifi.tech/images/devdox-snippets.png" />
 <Navbar />
 
 {#if isLoading}
